@@ -39,7 +39,7 @@ def general_hamiltonian(**pauli_terms): # Checks for errors then turns input int
     return pauli_terms
 
 
-def transverse_ising_hamiltonian(bonds, *, J, h, transverse = True):
+def transverse_ising_hamiltonian(bonds, *, J, h, transverse = True, axis = 'X'):
     ising_hamil = {}
     sites = {site for bond in bonds for site in bond}
     site_num = max(sites) + 1
@@ -54,7 +54,7 @@ def transverse_ising_hamiltonian(bonds, *, J, h, transverse = True):
     if transverse:
         for i in range(site_num):
             pauli_term = ['I'] * site_num
-            pauli_term[i] = 'X'
+            pauli_term[i] = axis
             joined_pauli_term = ''.join(pauli_term)
 
             ising_hamil[joined_pauli_term] = -h

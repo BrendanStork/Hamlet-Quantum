@@ -48,3 +48,8 @@ def apply_cnot(state, control, target):
                 )
 
     return new_state
+
+def apply_hadamard_all(qc):
+    for i in range(qc.numqubits):
+        qc.h(i)
+    return qc

@@ -25,9 +25,8 @@ def exact_evolve(qc0, basis, time):
 def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
     qc = qc0
     length_basis_term = len(next(iter(basis))) # Grabs the first basis state's length
-    #num_qubits = int(np.log2(len(qc.state))) # Gives number of qubits based on state coefficient length
-    num_qubits = qc.numqubits
-    
+    num_qubits = int(np.log2(len(qc.state))) # Gives number of qubits based on state coefficient length
+
     if num_qubits != length_basis_term:
         raise ValueError('Length of Pauli strings must equal number of qubits')
     
