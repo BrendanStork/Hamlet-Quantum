@@ -1,5 +1,6 @@
 import numpy as np
 from many_body_qsim.circuits import Quantum_Circuit
+from many_body_qsim.gates import apply_hadamard_all
 from scipy.optimize import minimize
 
 '''
@@ -255,12 +256,15 @@ def run_qaoa(
     )
 
 
+    #return result
+    
     return {
         'result': result,
         'parameters': result.x,
         'state': final_state,
         'cost': result.fun
     }
+    
     
 def qaoa_energy_map(
     cost_hamiltonian,
@@ -295,3 +299,12 @@ def p_val_probablity(cost_hamiltonian, p):
         
         prob_array[i-1, :] = np.abs(result['state'].state)**2
     return prob_array
+
+def enumerate_probabilities(qc):
+    probabilities = np.abs(qc.state)**2
+    
+    for state, probability in enumerate(probabilities):
+        print(
+            format(state, f'0{N}b'),
+            probability
+        )

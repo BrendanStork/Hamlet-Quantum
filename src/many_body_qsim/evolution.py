@@ -1,6 +1,8 @@
 import numpy as np
-from .circuits import Quantum_Circuit
+from scipy import sparse
+from scipy.sparse import linalg as splinalg
 from scipy import linalg
+from .circuits import Quantum_Circuit
 from .gates import GATES
 
 
@@ -8,7 +10,10 @@ def string_to_operator(pauli_string):
     operator = GATES[pauli_string[0]] # Builds operator
     for p in pauli_string[1:]:
         operator = np.kron(operator, GATES[p])
+        #operator = sparse.kron(operator, GATES[p], format='csc')
+        
     return operator
+
 
 def exact_evolve(qc0, basis, time):
     H = 0*1j
@@ -18,7 +23,23 @@ def exact_evolve(qc0, basis, time):
     new_state = qc0
     new_state.state = U @ qc0.state
     return new_state
+'''
 
+def exact_evolve(qc0, basis, time):
+
+    dim = 2**qc0.numqubits
+
+    H = sparse.csc_matrix((dim, dim), dtype=complex)
+
+    for op, coeff in basis.items():
+        H += coeff * string_to_operator(op)
+
+    new_state = qc0
+    new_state.state = splinalg.expm_multiply(-1j * H * time,
+                                             qc0.state)
+
+    return new_state
+'''
 ######GENERAL N QUBIT TROTTER#########
 
 
