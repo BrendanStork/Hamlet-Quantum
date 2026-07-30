@@ -6,7 +6,7 @@ from many_body_qsim.hamiltonians import (
     string_to_operator,
     general_hamiltonian,
     transverse_ising_hamiltonian,
-    heisenberg_xyz_hamiltonian,
+    heisenberg_hamiltonian,
     hubbard_hamiltonian
     )
 
@@ -38,7 +38,7 @@ def test_tfim_is_hermitian():
     
 def test_heisen_is_hermitian():
 
-    H_pauli = heisenberg_xyz_hamiltonian(bonds, Jx=4.0, Jy=.5, Jz = 10, h = 7.2)
+    H_pauli = heisenberg_hamiltonian(bonds, Jx=4.0, Jy=.5, Jz = 10, h = 7.2)
     H = 0*1j
     for op, coeff in H_pauli.items():
         H += coeff * string_to_operator(op)

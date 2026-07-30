@@ -103,6 +103,7 @@ class Quantum_Circuit:
         self.state = apply_cnot(self.state, control, target)
         return
         
+    '''
     def expectation_value(self, pauli_string):
 
         if len(pauli_string) != self.numqubits:
@@ -112,6 +113,44 @@ class Quantum_Circuit:
         for p in pauli_string[1:]:
             operator = np.kron(operator, GATES[p])
         return np.vdot(self.state, operator @ self.state).real # Expectation value
+    
+    '''
+    def expectation_value(self, pauli_string):
+
+        if len(pauli_string) != self.numqubits:
+            raise ValueError('Pauli string length must equal number of qubits')
+            
+        expectation = 0.0
+
+        for i in range(len(self.state)):
+
+            j = i
+            phase = 1.0 + 0j
+
+            for q, p in enumerate(pauli_string):
+
+                bit = self.numqubits - 1 - q
+                bit_value = (i >> bit) & 1
+
+                if p == 'X':
+                    j ^= (1 << bit)
+
+                elif p == 'Y':
+                    j ^= (1 << bit)
+
+                    if bit_value == 0:
+                        phase *= 1j
+                    else:
+                        phase *= -1j
+
+                elif p == 'Z':
+                    if bit_value == 1:
+                        phase *= -1
+
+            expectation += np.conj(self.state[i]) * phase * self.state[j]
+
+        return expectation.real
+    
     
     def copy(self):
 

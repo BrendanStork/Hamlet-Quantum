@@ -21,6 +21,14 @@ def magnetization(axis='Z'):
 
     return _obs
  
+def total_expectation_value(qc, total_pauli_string):
+    length_pauli_term = len(next(iter(total_pauli_string)))
+    exp_val = 0
+    for pauli_term, coeff in H.items():
+        exp_val += coeff * qc.expectation_value(pauli_term)
+
+        
+    return exp_val
 
 def expectation_value(operator_string):
     def _obs(psi):
