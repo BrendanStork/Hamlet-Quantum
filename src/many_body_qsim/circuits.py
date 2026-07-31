@@ -63,7 +63,7 @@ class Quantum_Circuit:
         
     def y(self, qubitIndex):
         self.gate_op(GATES['Y'], qubitIndex)
-        self.gates.append(('Z', qubitIndex))
+        self.gates.append(('Y', qubitIndex))
         return
         
     def z(self, qubitIndex):
@@ -167,95 +167,109 @@ class Quantum_Circuit:
         for gate in self.gates:
 
             if gate[0] == 'CX':
-                used = {gate[1], gate[2]}
-                
+
+                used = set(
+                    range(
+                        min(gate[1], gate[2]),
+                        max(gate[1], gate[2]) + 1
+                    )
+                )
+
             else:
+
                 used = {gate[1]}
 
-            placed = False
-
-            for layer in layers:
-
-                occupied = set()
-
-                for g in layer:
-
-                    if g[0] == 'CX':
-                        occupied.update([g[1], g[2]])
-                        #occupied.update([range(g[1], g[2])])
-                        
-                    else:
-                        occupied.add(g[1])
-
-                if occupied.isdisjoint(used):
-                    layer.append(gate)
-                    placed = True
-                    break
-
-            if not placed:
+            # First gate creates the first layer
+            if not layers:
                 layers.append([gate])
+                continue
 
-        return layers
-    
-    def draw(self):
+            occupied = set()
 
-        WIDTH = 8
-        circuit_line = '─' * WIDTH
-        lines = [
-            f'q{i}: {'─' * 2}'
-            for i in range(self.numqubits)
-        ]
+            # Only inspect the most recent layer
+            for g in layers[-1]:
 
-        for layer in self.layers():
+                if g[0] == 'CX':
 
-            # Start every qubit with a horizontal wire
-            cells = ['─' * (WIDTH + 1) for _ in range(self.numqubits)]
-
-            for gate in layer:
-
-                name = gate[0]
-
-                # -------------------------
-                # Single-qubit gates
-                # -------------------------
-
-                if name != 'CX':
-
-                    target = gate[1]
-
-                    if name.startswith('R'):
-                        label = name #f'{name}{circuit_line}' #({gate[2]:.2f})'
-                        cells[target] = f'{label}{circuit_line[:-1]}'
-                    else:
-                        label = name
-                        cells[target] = f'{label}{circuit_line}'
-                    #cells[target] = f'{label}{circuit_line}'
-
-
-                # -------------------------
-                # CNOT
-                # -------------------------
+                    occupied.update(
+                        range(
+                            min(g[1], g[2]),
+                            max(g[1], g[2]) + 1
+                        )
+                    )
 
                 else:
 
-                    control = gate[1]
-                    target = gate[2]
+                    occupied.add(g[1])
 
-                    low = min(control, target)
-                    high = max(control, target)
+            if occupied.isdisjoint(used):
 
-                    cells[control] = f'{"●"}{circuit_line}'
-                    cells[target] = f'{"X"}{circuit_line}'
+                layers[-1].append(gate)
 
-                    #for q in range(low, high):
-                    #    cells[q] = f'{"│"}{circuit_line}'
+            else:
 
+                layers.append([gate])
 
-            # Append this layer to the circuit
-            for q in range(self.numqubits):
-                lines[q] += cells[q]
-
-        for line in lines:
-            print(line)
+        return layers
         
+    def draw(self, layers_per_block=17):
+
+        WIDTH = 5
+        circuit_line = '─' * WIDTH
+
+        layers = self.layers()
+
+        # Draw one block at a time
+        for start in range(0, len(layers), layers_per_block):
+
+            lines = [
+                f'q{i}: {"─"*2}'
+                for i in range(self.numqubits)
+            ]
+
+            # Only draw this block of layers
+            for layer in layers[start:start + layers_per_block]:
+
+                cells = ['─' * (WIDTH + 1) for _ in range(self.numqubits)]
+
+                for gate in layer:
+
+                    name = gate[0]
+
+                    if name != 'CX':
+
+                        target = gate[1]
+
+                        if name.startswith('R'):
+                            label = name
+                            cells[target] = f'{label}{circuit_line[:-1]}'
+                        else:
+                            label = name
+                            cells[target] = f'{label}{circuit_line}'
+
+                    else:
+
+                        control = gate[1]
+                        target = gate[2]
+
+                        low = min(control, target)
+                        high = max(control, target)
+
+                        cells[control] = f'●{circuit_line}'
+                        cells[target] = f'X{circuit_line}'
+
+                        for q in range(low + 1, high):
+                            cells[q] = f'│{circuit_line}'
+
+                for q in range(self.numqubits):
+                    lines[q] += cells[q]
+
+            for line in lines:
+                print(line)
+
+            # Blank line between blocks
+            if start + layers_per_block < len(layers):
+                print()
+    
+
     
