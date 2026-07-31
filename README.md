@@ -1,110 +1,78 @@
-# Quantum Many-Body Simulation Framework
+# Hamlet Quantum
 
-A quantum circuit and Hamiltonian simulation framework built from scratch in Python (NumPy and SciPy), featuring custom statevector evolution, gate-level operations, Trotterized Hamiltonian simulation, and quantum many-body modeling.
+## A First-Principles Quantum Computing and Many-Body Simulation Framework
 
-The framework bridges quantum computing and condensed matter physics through implementations of quantum circuits, Pauli-string Hamiltonians, Jordan-Wigner mappings, and lattice models including the Fermi-Hubbard, Heisenberg, and Transverse-Field Ising systems.
+![Project Overview Figure Placeholder](docs/figures/project_overview.png)
+
+A modular quantum computing many-body simulation framework built from scratch in Python using **NumPy** and **SciPy**, combining quantum circuit simulation, Hamiltonian-based quantum dynamics, variational algorithms, and condensed matter physics simulations into a unified software architecture.
 
 ---
 
 # Overview
 
-The project combines low-level circuit-based quantum simulation with a Hamiltonian-centric architecture for quantum many-body dynamics. The framework represents physical systems through Pauli-string Hamiltonians defined on lattice geometries, while also providing explicit gate-level statevector evolution through custom implementations of single-qubit gates, CNOT operations, and Trotterized circuit decompositions.
+Hamlet Quantum provides a lightweight implementation of core quantum computing concepts without relying on external quantum SDKs. The project bridges **quantum information** and **quantum many-body physics** through implementations of custom statevector simulation, quantum gate operations, **circuit compilation and visualization**, Pauli-string Hamiltonians, **exact and Trotterized time evolution**, lattice models including the **Fermi-Hubbard**, **Heisenberg**, and **Transverse-Field Ising** models, **Jordan-Wigner transformations** for the Hubbard model, and hybrid quantum-classical algorithms including **Variational Quantum Eigensolver (VQE)** and **Quantum Approximate Optimization Algorithm (QAOA)**.
 
-Core capabilities include:
-
-* Explicit gate-level statevector simulation
-* Bitwise CNOT and qubit-index manipulation
-* Digital quantum simulation via Trotter decomposition
-* Lattice model generation for:
-
-  * Transverse Field Ising Model (TFIM)
-  * Heisenberg Model
-  * Fermi–Hubbard Model
-* Jordan-Wigner fermionic operator -> qubit mapping for Fermi-Hubbard 
-* Arbitrary Pauli-string Hamiltonian construction
-* Observable tracking:
-
-  * Magnetization
-  * Two-point correlations
-  * Correlation maps
-* Exact time evolution via matrix exponentiation
-* Benchmarking of exact vs approximate dynamics
-* Modular simulation and plotting workflows
-
-The framework is implemented directly using NumPy and SciPy rather than relying on high-level quantum SDK abstractions.
-
+Unlike high-level quantum SDK wrappers, this framework implements core simulation methods directly, emphasizing numerical transparency, modular design, and understanding of the underlying physics. The framework was developed from first principles to provide transparency into the underlying mathematics and numerical methods behind quantum simulation, and is designed as both a research and educational platform for exploring the connection between quantum information, computational physics, and quantum many-body systems.
 
 ---
 
-# Key Features
+# Highlights
 
-## Quantum Circuit Simulation
-- Statevector-based quantum simulation
-- Full single-qubit gate set: X, Y, Z, H, S, T, rotations
-- Multi-qubit CNOT via bitwise optimized amplitude manipulation
-- Circuit evolution via sequential gate application
+- Custom statevector quantum circuit simulator
+- Gate-level quantum operations implemented from first principles
+- Circuit compilation, layering, and visualization
+- General Pauli-string Hamiltonian representation
+- Exact Hamiltonian time evolution
+- Suzuki-Trotter digital quantum simulation
+- Quantum lattice model generation
+- Jordan-Wigner fermion-to-qubit mapping for the Hubbard model
+- Observable calculation and correlation analysis
+- Variational Quantum Eigensolver (VQE)
+- Quantum Approximate Optimization Algorithm (QAOA)
 
-## Hamiltonian Construction
-- Arbitrary Pauli-string Hamiltonians on N-qubit systems
-- Operator validation and consistency checks
-- Conversion from symbolic operators to matrix form or Totterized operations
-- Fermi-Hubbard model Hamiltonian support
-- Heisenberg model
-- Transverse-field Ising model
-- Jordan-Wigner decomposition for Fermi-Hubbard
+## Structure
 
-## Lattice Model Generation
-- 2D square lattice with open boundary conditions
-- Bond-based interaction graph construction
-- Site-to-qubit mapping for many-body systems
-- Scalable lattice Hamiltonian assembly
+The framework separates:
 
-## Time Evolution
-- Exact evolution:
-  
-  $U(t) = e^{-iHt}$
-  
-- Trotterized evolution via operator decomposition
+```
+Lattice Geometry
+        |
+        v
+Hamiltonian Construction
+        |
+        v
+Quantum Evolution
+        |
+        v
+Observables and Analysis
+```
 
-  $U(t) \approx \left( \prod_j e^{-i H_j \Delta t} \right)^n$
-  
-- Configurable Trotter step resolution
-- Exact vs approximate benchmarking support
+This allows the same underlying infrastructure to support both:
 
-## Trotter Evolution Modes
+- **gate-based quantum computation**
+- **many-body Hamiltonian simulation**
 
-The framework supports two Trotterization strategies:
+## Demonstrations
 
-- Fixed timestep (default):
-  
-  ψₙ₊₁ = U(Δt) ψₙ
+### 1. Exact vs Trotter Evolution: Transverse Field Ising Model
 
-  This approach mirrors standard numerical time integration methods and is well suited for long-time dynamical simulations.
+The transverse field Ising model:
 
-- Fixed Trotter order:
+$$
+H =
+-J\sum_{\langle i,j\rangle} Z_iZ_j
+-h\sum_i X_i
+$$
 
-  A fixed number of Trotter slices is used for a target evolution time.
+is generated on arbitrary lattice geometries and evolved using both exact and Trotterized methods.
 
-  This mode is primarily intended for benchmarking Trotterization error against exact evolution.
-
-## Observables
-- Magnetization along X, Y, Z
-- Two-point correlation functions
-- General expectation value framework for arbitrary operators
-- Time-dependent observable tracking
-
-## Visualization
-- Exact vs Trotter comparison plots
-- Multi-panel subplot support
-- Correlation maps
-- Matplotlib wrapper for consistent scientific visualization
-
----
-
-# Example: Transverse Field Ising Model (2D)
+Example workflow:
 
 ```python
-bonds = squarelattice(Nx=3, Ny=2)
+bonds = square_lattice(
+    Nx=3,
+    Ny=2
+)
 
 H = transverse_ising_hamiltonian(
     bonds,
@@ -112,186 +80,290 @@ H = transverse_ising_hamiltonian(
     h=1
 )
 
-qc = Quantum_Circuit(6)
-qc.x(0)  # initial excitation
-
-obs_z = magnetization(axis='Z')
-
 t, mz_exact = observable_vs_time(
-    qc,
+    circuit,
     H,
     time=15,
     timesteps=100,
-    method='exact',
-    observable=obs_z
+    method='exact'
 )
 
 t, mz_trotter = observable_vs_time(
-    qc,
+    circuit,
     H,
     time=15,
     timesteps=100,
     method='trotter',
-    trotter_steps=20,
-    observable=obs_z
+    trotter_steps=20
 )
-
 ```
 
-# Example Output
+Example output:
 
-The framework produces time-dependent quantum dynamics that can be directly compared between exact and approximate evolution methods.
+![TFIM Magnetization Dynamics](figures/square_tfim_magnetization_exact_vs_trotter.png)
 
-## Magnetization Dynamics (Exact vs Trotter)
+This demonstrates:
 
-
-![Magnetization Dynamics](figures/square_tfim_magnetization_exact_vs_trotter.png)
-
-Expected results include:
-
-- oscillatory magnetization dynamics
-- convergence of Trotter simulation toward the exact solution as the number of Trotter steps increases
-- clear separation between approximation regimes
+- lattice Hamiltonian construction
+- quantum state evolution
+- exact numerical dynamics
+- Trotter approximation benchmarking
+- observable tracking
 
 ---
 
+### 2. VQE: Heisenberg Correlation Analysis
+
+The framework implements VQE for approximating ground-state energies using parameterized quantum circuits.
+
+The optimization target is:
+
+$$
+E(\theta)=
+\langle\psi(\theta)|H|\psi(\theta)\rangle
+$$
+
+Example workflow:
+
+```python
+result = run_vqe(
+    Hamiltonian=H,
+    ansatz=hardware_efficient_ansatz,
+    optimizer='L-BFGS-B'
+)
+```
+
+Example output:
+
+![VQE Convergence](figures/vqe_convergence.png)
+
+The VQE implementation demonstrates:
+
+- parameterized circuit construction
+- expectation value evaluation
+- classical optimization
+- comparison against exact diagonalization
+- ground-state fidelity analysis
+
+---
+
+### 3. QAOA: Spin State Optimization
+
+The framework includes an implementation of the **Quantum Approximate Optimization Algorithm (QAOA)** for finding low-energy states of spin Hamiltonians.
+
+QAOA prepares a variational quantum state by alternating between evolution under a problem Hamiltonian and a mixer Hamiltonian:
+
+$$
+|\psi(\boldsymbol{\gamma},\boldsymbol{\beta})\rangle
+=
+\prod_{k=1}^{p}
+e^{-i\beta_k H_M}
+e^{-i\gamma_k H_C}
+|+\rangle^{\otimes n}
+$$
+
+where:
+
+- \(H_C\) encodes the optimization problem
+- \(H_M\) mixes the computational basis states
+- \(p\) is the circuit depth
+- \(\gamma\) and \(\beta\) are optimized variational parameters
+
+In this example, spin configurations are encoded as computational basis states and optimized through a Hamiltonian representation of the spin system.
+
+Example workflow:
+
+```python
+result = run_qaoa(
+    cost_hamiltonian,
+    mixer_hamiltonian,
+    layers=2,
+    optimizer='L-BFGS-B'
+)
+
+optimized_state = result.state
+energy = result.energy
+```
+
+The optimization process minimizes the expectation value:
+
+$$
+E(\gamma,\beta)=
+\langle\psi(\gamma,\beta)|H_C|\psi(\gamma,\beta)\rangle
+$$
+
+and produces a variational approximation to the lowest-energy spin configuration.
+
+## Example Output
+
+![QAOA Spin Optimization](figures/qaoa_spin_optimization.png)
+
+The notebook demonstrates:
+
+- construction of spin Hamiltonians from physical interactions
+- parameterized QAOA circuit generation
+- hybrid quantum-classical optimization
+- convergence toward low-energy states
+- comparison between variational results and exact solutions
+
+---
+
+
 # Design Philosophy
 
-This framework is built around a Hamiltonian-centric abstraction rather than a purely circuit-centric model.
+The project emphasizes:
 
-Key principles include:
+## First-Principles Implementation
 
-## 1. Physics-first representation
+Core algorithms are implemented directly rather than relying on existing quantum frameworks.
 
-Hamiltonians are represented explicitly as sums of Pauli strings, preserving physical interpretability.
+This provides:
 
-## 2. Dual evolution modes
+- Transparency
+- Mathematical understanding
+- Full control over numerical methods
 
-Both exact and Trotterized evolution are supported within a unified interface for benchmarking and analysis.
+---
 
-## 3. Modular observables
+## Physics-Informed Simulation
 
-Physical observables are implemented as composable functions acting on quantum states.
+Rather than treating circuits as abstract operations, Hamlet Quantum connects quantum algorithms to physically meaningful systems:
 
-## 4. Separation of concerns
+- Spin models
+- Fermionic lattice models
+- Quantum dynamics
+- Many-body correlations
 
-- lattices define geometry
-- Hamiltonians define physics
-- circuits define state evolution
-- observables define measurements
+---
 
-## 5. Algorithmic transparency
+## Modular Scientific Software
 
-All operations are implemented explicitly using NumPy and SciPy for clarity rather than black-box optimization.
+The framework separates:
+
+- circuit construction
+- Hamiltonian generation
+- evolution algorithms
+- observables
+- visualization
+
+allowing components to be reused across different physical systems.
+
+---
+
+# Suggested Architecture
+
+The project is organized as a reusable Python package:
+
+```
+hamlet/
+│
+├── circuits/
+│   ├── circuit.py
+│   ├── gates.py
+│   └── compiler.py
+│
+├── hamiltonians/
+│   ├── pauli.py
+│   ├── hubbard.py
+│   ├── ising.py
+│   └── heisenberg.py
+│
+├── algorithms/
+│   ├── vqe.py
+│   └── qaoa.py
+│
+├── evolution/
+│   └── time_evolution.py
+│
+├── observables/
+│   └── measurements.py
+│
+└── visualization/
+    └── plotting.py
+```
+
+This modular architecture separates physical models from simulation algorithms, allowing the same Hamiltonian framework to be used for exact evolution, Trotterized dynamics, VQE, and QAOA.
 
 ---
 
 # Limitations
 
-This implementation is exploratory in nature and has several limitations.
+This project focuses on clarity and extensibility rather than competing with optimized production simulators.
 
-## Computational scaling
+Current limitations:
 
 - statevector simulation scales exponentially with qubit number
-- matrix-based Hamiltonian exponentiation becomes expensive beyond approximately 16–20 qubits
-
-## Missing optimizations
-
-- no sparse matrix representations
-- no tensor network (MPS) compression
+- dense matrix methods become expensive for larger systems
 - no GPU acceleration
+- no tensor-network compression
+- limited sparse-matrix support
 
-## Physics extensions not yet implemented
+These limitations motivate future extensions toward larger-scale simulation methods.
 
-- non-Hubbard-specific Jordan-Wigner mappings
-- entanglement entropy
-- structure factors in momentum space
+# Future Development
 
----
+Planned improvements include:
 
-# Future Work
-
-Planned extensions include:
-
-## Physics
-
-- periodic lattce boundary conditions
-- other lattice geometries (e.g. triangular, kagome, 1/5th-depleted square lattice)
-
-## Advanced Observables
-
-- entanglement entropy
-- structure factors
-- momentum-space correlations
-- fidelity and Loschmidt echo
-
-## Performance Improvements
-
-- sparse operator representations
-- cached Hamiltonian exponentiation
-- tensor network backend (MPS/DMRG-style simulation)
-- GPU acceleration
-
-## Software Architecture
-
-- full package modularization
-- testing suite (pytest)
-- CI integration
-- benchmarking suite
+- Sparse Hamiltonian representations
+- Improved simulation scaling
+- Tensor-network methods
+- Additional lattice geometries 
+- Quantum chemistry Hamiltonians
+- Added quantum algorithms
+- Hardware backend integration
 
 ---
 
-# Project Structure (Suggested)
-
-```text
-src/
-├── circuits.py
-├── evolution.py
-├── hamiltonians.py
-├── lattices.py
-├── observables.py
-├── plotting.py
-└── gates.py
-
-examples/
-├── tfim_demo.py
-└── trotter_comparison.py
-
-figures/
-└── square_tfim_magnetization_exact_vs_trotter.png
-````
-
----
 
 # Installation
 
+Clone the repository:
+
 ```bash
-git clone https://github.com/BrendanStork/Quantum-Lattice-Evolver-First-Principles
-cd Quantum-Lattice-Evolver-First-Principles
-pip install numpy scipy matplotlib
+git clone https://github.com/USERNAME/hamlet-quantum.git
+cd hamlet-quantum
+```
+
+Install using:
+
+```bash
+pip install -e .
+```
+
+Run examples:
+
+```bash
+jupyter lab examples/
 ```
 
 ---
 
-# Requirements
+# Dependencies
 
-* Python 3.9+
-* NumPy
-* SciPy
-* Matplotlib
+Core dependencies:
+
+- Python
+- NumPy
+- SciPy
+- Matplotlib
+
+Development:
+
+- pytest
+- Jupyter
 
 ---
 
-# Author Notes
+# Motivation
 
-This project was developed as an independent exploration of quantum many-body simulation, combining concepts from quantum computing and condensed matter physics.
+Modern quantum computing requires expertise across multiple domains:
 
-It focuses on:
+- Quantum information
+- Numerical simulation
+- Many-body physics
+- Software engineering
 
-* explicit implementation of quantum evolution algorithms
-* physically meaningful observables
-* modular scientific computing design
-* transparency of numerical methods
+Hamlet Quantum was developed to explore these connections by building the computational tools required to understand quantum systems from the ground up.
 
 ---
 
@@ -299,12 +371,11 @@ It focuses on:
 
 Brendan Stork
 
-BS & MS Physics — Quantum Engineering  
-San Jose State University
+Physics MS — San Jose State University
 
-Research areas include:
+Research interests:
+
+- Quantum computing
 - Quantum simulation
-- Quantum many-body systems
 - Condensed matter physics
-- Hamiltonian dynamics
-- Numerical quantum methods
+- Scientific computing
