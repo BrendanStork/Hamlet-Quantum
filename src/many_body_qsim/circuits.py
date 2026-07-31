@@ -160,6 +160,8 @@ class Quantum_Circuit:
 
         return new_qc
         
+        
+        
     def layers(self):
 
         layers = []
@@ -216,22 +218,36 @@ class Quantum_Circuit:
 
         WIDTH = 5
         circuit_line = '─' * WIDTH
+        #nrows = 2 * self.numqubits-1
 
         layers = self.layers()
 
         # Draw one block at a time
         for start in range(0, len(layers), layers_per_block):
-
+            
             lines = [
                 f'q{i}: {"─"*2}'
                 for i in range(self.numqubits)
             ]
+            
+            '''
+            lines = ['' for _ in range(nrows)]
 
+            for q in range(self.numqubits):
+                lines[2 * q] = f'q{q}: {"─"*2}'
+            '''
             # Only draw this block of layers
             for layer in layers[start:start + layers_per_block]:
-
+                
+                
                 cells = ['─' * (WIDTH + 1) for _ in range(self.numqubits)]
+                '''
+                cells = [' ' * (WIDTH + 1) for _ in range(nrows)]
 
+                for q in range(self.numqubits):
+                    cells[2*q] = '─' * (WIDTH + 1)
+                '''
+                    
                 for gate in layer:
 
                     name = gate[0]
