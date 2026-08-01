@@ -159,15 +159,15 @@ $$
 \prod_{k=1}^{p}
 e^{-i\beta_k H_M}
 e^{-i\gamma_k H_C}
-|+\rangle^{\otimes n}
+\lvert +\rangle^{\otimes n}
 $$
 
 where:
 
-- \(H_C\) encodes the optimization problem
-- \(H_M\) mixes the computational basis states
-- \(p\) is the circuit depth
-- \(\gamma\) and \(\beta\) are optimized variational parameters
+- $H_C$ encodes the optimization problem
+- $H_M$ mixes the computational basis states
+- $p$ is iteration of operations
+- $\gamma\$ and $\beta\$ are optimized variational parameters
 
 In this example, spin configurations are encoded as computational basis states and optimized through a Hamiltonian representation of the spin system.
 
