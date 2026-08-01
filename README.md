@@ -153,9 +153,7 @@ The framework includes an implementation of the **Quantum Approximate Optimizati
 
 QAOA prepares a variational quantum state by alternating between evolution under a problem Hamiltonian and a mixer Hamiltonian:
 
-$$
-|\psi(\boldsymbol{\gamma},\boldsymbol{\beta})\rangle
-=
+$$|\psi(\boldsymbol{\gamma},\boldsymbol{\beta})\rangle=
 \prod_{k=1}^{p}
 e^{-i\beta_k H_M}
 e^{-i\gamma_k H_C}
