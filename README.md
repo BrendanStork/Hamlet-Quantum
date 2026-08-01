@@ -7,6 +7,8 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 ---
 
+![Overview](figures/overview.png)
+
 # Overview
 
 Hamlet Quantum provides a lightweight implementation of core quantum computing concepts without relying on external quantum SDKs. The project bridges **quantum information** and **quantum many-body physics** through implementations of custom statevector simulation, quantum gate operations, **circuit compilation and visualization**, Pauli-string Hamiltonians, **exact and Trotterized time evolution**, lattice models including the **Fermi-Hubbard**, **Heisenberg**, and **Transverse-Field Ising** models, **Jordan-Wigner transformations** for the Hubbard model, and hybrid quantum-classical algorithms including **Variational Quantum Eigensolver (VQE)** and **Quantum Approximate Optimization Algorithm (QAOA)**.
