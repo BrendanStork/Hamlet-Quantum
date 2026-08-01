@@ -15,6 +15,7 @@ build/
 
 # macOS
 .DS_Store
+.virtual_documents/
 
 # Scratch work
 myscratch/

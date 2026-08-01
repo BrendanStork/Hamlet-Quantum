@@ -2,7 +2,6 @@
 
 ## A First-Principles Quantum Computing and Many-Body Simulation Framework
 
-![Project Overview Figure Placeholder](docs/figures/project_overview.png)
 
 A modular quantum computing many-body simulation framework built from scratch in Python using **NumPy** and **SciPy**, combining quantum circuit simulation, Hamiltonian-based quantum dynamics, variational algorithms, and condensed matter physics simulations into a unified software architecture.
 
@@ -135,7 +134,7 @@ result = run_vqe(
 
 Example output:
 
-![VQE Convergence](figures/vqe_convergence.png)
+![VQE correlation Map](figures/vqe_correlation.png)
 
 The VQE implementation demonstrates:
 
@@ -194,7 +193,11 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 ## Example Output
 
-![QAOA Spin Optimization](figures/qaoa_spin_optimization.png)
+![QAOA Probability Distribution](figures/qaoa_prob_distr.png)
+
+![QAOA Spin Optimization](figures/qaoa_energy_landscape.png)
+
+![QAOA Spin Optimization](figures/qaoa_circuit.png)
 
 The notebook demonstrates:
 
