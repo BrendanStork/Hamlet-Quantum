@@ -157,7 +157,7 @@ $$|\psi(\boldsymbol{\gamma},\boldsymbol{\beta})\rangle=
 \prod_{k=1}^{p}
 e^{-i\beta_k H_M}
 e^{-i\gamma_k H_C}
-\lvert +\rangle^{\otimes n}
+\lvert+\rangle^{\otimes n}
 $$
 
 where:
