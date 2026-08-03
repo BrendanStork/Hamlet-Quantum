@@ -219,9 +219,8 @@ class Quantum_Circuit:
 
         return layers
         
-    def draw(self, layers_per_block=17):
-        WIDTH = 9
-
+    def draw(self, layer_width = 11, layers_per_block=10):
+        
         layers = self.layers()
 
         # Draw one block at a time
@@ -231,7 +230,7 @@ class Quantum_Circuit:
                 f'q{i//2}: {"─"*2}'
                 if i%2 == 0
                 else ' ' * 6
-                for i in range(qc.numqubits*2)]
+                for i in range(self.numqubits*2)]
             
             # Only draw this block of layers
             for layer in layers[start:start + layers_per_block]:
@@ -239,10 +238,10 @@ class Quantum_Circuit:
 
 
                 cells = [
-                    '─' * WIDTH
+                    '─' * layer_width
                     if i%2==0
-                    else ' ' * WIDTH
-                    for i in range(qc.numqubits*2)]
+                    else ' ' * layer_width
+                    for i in range(self.numqubits*2)]
                 
                     
                 for gate in layer:
@@ -253,12 +252,12 @@ class Quantum_Circuit:
 
                         target = gate[1]
 
-                        label = name
-                        cells[target*2] = label.center(WIDTH, '─')
+                        label = f'[{name}]'
+                        cells[target*2] = label.center(layer_width, '─')
                         
                         if name.startswith('R'):
                             theta = gate[2]
-                            cells[target*2+1] = f'({theta:.1f})'.center(WIDTH)
+                            cells[target*2+1] = f'({theta:.1f})'.center(layer_width)
 
 
                     else:
@@ -269,16 +268,16 @@ class Quantum_Circuit:
                         low = min(control, target)*2
                         high = max(control, target)*2
 
-                        cells[control*2] = '●'.center(WIDTH, '─')
-                        cells[target*2] = 'X'.center(WIDTH, '─')
+                        cells[control*2] = '●'.center(layer_width, '─')
+                        cells[target*2] = 'X'.center(layer_width, '─')
 
                         for q in range(low + 1, high):
                             if q%2 ==0:
-                                cells[q] = '│'.center(WIDTH, '─')
+                                cells[q] = '│'.center(layer_width, '─')
                             else:
-                                cells[q] = '│'.center(WIDTH, ' ')
+                                cells[q] = '│'.center(layer_width, ' ')
 
-                for q in range(qc.numqubits*2):
+                for q in range(self.numqubits*2):
                     lines[q] += cells[q]
 
             for line in lines:
