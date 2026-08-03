@@ -82,15 +82,13 @@ def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = 
 
     elif method == 'trotter':
         qc = qc0.copy()
-        #print(N)
         sample_length = int(N/sample_every)
-        #print(sample_length)
         vals = []
         for i in range(0, N):
             qc = trotter_step(qc, basis, dt = dt)
             if i % sample_every == 0:
-                #print(i % sample_every)
                 vals.append(observable(qc))
+                
     elif method == 'trotter_fixed_steps':
         for i in range(timesteps):
             qc = qc0.copy()

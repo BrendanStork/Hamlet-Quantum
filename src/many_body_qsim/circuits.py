@@ -115,6 +115,11 @@ class Quantum_Circuit:
         self.gates.append(('CX', control, target))
         return
         
+    def apply_hadamard_all(self):
+        for i in range(self.numqubits):
+            self.h(i)
+        return
+        
 
     def expectation_value(self, pauli_string):
 
@@ -214,39 +219,30 @@ class Quantum_Circuit:
 
         return layers
         
-    def draw(self, layers_per_block=17):
-
-        WIDTH = 5
-        circuit_line = '─' * WIDTH
-        #nrows = 2 * self.numqubits-1
-
+    def draw(self, layer_width = 11, layers_per_block=10):
+        
         layers = self.layers()
 
         # Draw one block at a time
         for start in range(0, len(layers), layers_per_block):
-            
-            lines = [
-                f'q{i}: {"─"*2}'
-                for i in range(self.numqubits)
-            ]
-            
-            '''
-            lines = ['' for _ in range(nrows)]
 
-            for q in range(self.numqubits):
-                lines[2 * q] = f'q{q}: {"─"*2}'
-            '''
+            lines = [
+                f'q{i//2}: {"─"*2}'
+                if i%2 == 0
+                else ' ' * 6
+                for i in range(self.numqubits*2)]
+            
             # Only draw this block of layers
             for layer in layers[start:start + layers_per_block]:
                 
-                
-                cells = ['─' * (WIDTH + 1) for _ in range(self.numqubits)]
-                '''
-                cells = [' ' * (WIDTH + 1) for _ in range(nrows)]
 
-                for q in range(self.numqubits):
-                    cells[2*q] = '─' * (WIDTH + 1)
-                '''
+
+                cells = [
+                    '─' * layer_width
+                    if i%2==0
+                    else ' ' * layer_width
+                    for i in range(self.numqubits*2)]
+                
                     
                 for gate in layer:
 
@@ -256,28 +252,32 @@ class Quantum_Circuit:
 
                         target = gate[1]
 
+                        label = f'[{name}]'
+                        cells[target*2] = label.center(layer_width, '─')
+                        
                         if name.startswith('R'):
-                            label = name
-                            cells[target] = f'{label}{circuit_line[:-1]}'
-                        else:
-                            label = name
-                            cells[target] = f'{label}{circuit_line}'
+                            theta = gate[2]
+                            cells[target*2+1] = f'({theta:.1f})'.center(layer_width)
+
 
                     else:
 
                         control = gate[1]
                         target = gate[2]
 
-                        low = min(control, target)
-                        high = max(control, target)
+                        low = min(control, target)*2
+                        high = max(control, target)*2
 
-                        cells[control] = f'●{circuit_line}'
-                        cells[target] = f'X{circuit_line}'
+                        cells[control*2] = '●'.center(layer_width, '─')
+                        cells[target*2] = 'X'.center(layer_width, '─')
 
                         for q in range(low + 1, high):
-                            cells[q] = f'│{circuit_line}'
+                            if q%2 ==0:
+                                cells[q] = '│'.center(layer_width, '─')
+                            else:
+                                cells[q] = '│'.center(layer_width, ' ')
 
-                for q in range(self.numqubits):
+                for q in range(self.numqubits*2):
                     lines[q] += cells[q]
 
             for line in lines:
