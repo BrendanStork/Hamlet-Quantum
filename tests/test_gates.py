@@ -1,24 +1,32 @@
 import numpy as np
+import pytest
+from many_body_qsim.gates import GATES, apply_cnot, apply_hadamard_all
+from many_body_qsim.circuits import Quantum_Circuit
 
-from many_body_qsim.gates import GATES
+theta = np.random.default_rng().uniform(0,2*np.pi)
 
-X = GATES['X']
-Y = GATES['Y']
-Z = GATES['Z']
-H = GATES['H']
-I = np.eye(2)
-
-def test_pauli_square():
-    """Pauli matrices squared should equal identity."""
-
-    np.testing.assert_allclose(X @ X, I)
-    np.testing.assert_allclose(Y @ Y, I)
-    np.testing.assert_allclose(Z @ Z, I)
+@pytest.mark.parametrize(
+'gate',
+['X', 'Y', 'Z', 'H', 'S', 'Sdag', 'T']
+)
+def test_single_gate_unitary(gate):
+    U = GATES[gate]
+    I = np.eye(2)
+    np.testing.assert_allclose(U.conj().T @ U, I, atol=1e-7)
 
 
-def test_hadamard_is_unitary():
-    
-    np.testing.assert_allclose(
-        H.conj().T @ H,
-        np.eye(2), atol=1e-15
-    )
+@pytest.mark.parametrize(
+'gate',
+['RX', 'RY', 'RZ']
+)
+def test_rotation_gate_unitary(gate):
+    U = GATES[gate](theta)
+    I = np.eye(2)
+    np.testing.assert_allclose(U.conj().T @ U, I, atol=1e-7)
+
+
+def test_two_qubit_gate():
+    qc0 = Quantum_Circuit(2)
+    qc0.x(0)
+    qc_state = apply_cnot(qc0.state, 0, 1)
+    np.testing.assert_allclose(qc_state, np.array([0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j]), atol=1e-7)
