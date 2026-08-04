@@ -107,7 +107,7 @@ def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
                     qc.h(q)
                     qc.s(q)
 
-    return
+    return qc
 
 
 def trotter_step(qc, basis, *, dt):
@@ -189,5 +189,5 @@ def trotter_step(qc, basis, *, dt):
                     qc.gate_count += 2
                     #print('H', q)
                     #print('S', q)
-    return
+    return qc
     
