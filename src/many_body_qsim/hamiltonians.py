@@ -288,7 +288,7 @@ def hubbard_spectrum(bonds, * , t, U, num_fermions):
     N_target = num_fermions # Desired particle number subspace target (e.g. N = 2 fermions in system)
     
     H = 0*1j
-    for op, coeff in basis.items():
+    for op, coeff in H_pauli.items():
         H += coeff * string_to_operator(op)
 
     indices = [i for i in range(16) if N_list[i] == N_target] # Which basis state indices have N_target fermions
