@@ -139,9 +139,9 @@ def plot_correlation_map(
 
     if ylabel:
         ax.set_ylabel(ylabel, fontsize=ylabel_fontsize)
-
-    if title:
-        ax.set_title(title)
+        
+        if title:
+            ax.set_title(title, fontsize=title_fontsize)
 
     #if colorbar:
     #    plt.colorbar(im, ax=ax)

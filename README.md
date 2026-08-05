@@ -136,7 +136,9 @@ result = run_vqe(
 
 Example output:
 
-![VQE correlation Map](figures/vqe_correlation.png)
+![VQE correlation Map](figures/vqe_heisen_corr_map.png)
+
+![VQE Circuit](figures/ansatz_circuit.png)
 
 The VQE implementation demonstrates:
 
@@ -199,7 +201,7 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 ![QAOA Spin Optimization](figures/qaoa_energy_landscape.png)
 
-![QAOA Spin Optimization](figures/qaoa_circuit.png)
+
 
 The notebook demonstrates:
 
