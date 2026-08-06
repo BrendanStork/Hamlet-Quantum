@@ -77,9 +77,11 @@ bonds = square_lattice(
 
 H = transverse_ising_hamiltonian(
     bonds,
-    J=1,
-    h=1
+    J=1.0,
+    h=1.0,
 )
+
+mZ = magnetization(axis = 'Z')
 
 t, mz_exact = observable_vs_time(
     circuit,
@@ -87,6 +89,7 @@ t, mz_exact = observable_vs_time(
     time=15,
     timesteps=100,
     method='exact'
+    observable = mZ
 )
 
 t, mz_trotter = observable_vs_time(
@@ -94,8 +97,9 @@ t, mz_trotter = observable_vs_time(
     H,
     time=15,
     timesteps=100,
-    method='trotter',
+    method='trotter_fixed_steps',
     trotter_steps=20
+    observable = mZ
 )
 ```
 
@@ -128,10 +132,26 @@ $$
 Example workflow:
 
 ```python
-result = run_vqe(
-    Hamiltonian=H,
-    ansatz=hardware_efficient_ansatz,
-    optimizer='L-BFGS-B'
+
+H = heisenberg_hamiltonian(
+    bonds, 
+    Jx=-1, 
+    Jy=-1, 
+    Jz=-1, 
+    h=0
+)
+
+layers = 5
+
+vqe_results = run_vqe(
+    H, 
+    ansatz=hardware_efficient_ansatz, 
+    method='L-BFGS-B', 
+    layers=layers
+)
+
+vqe_ground_energy = vqe_results.fun
+optimal_params = vqe_results.x
 )
 ```
 
@@ -179,15 +199,26 @@ In this example, spin configurations are encoded as computational basis states a
 Example workflow:
 
 ```python
-result = run_qaoa(
-    cost_hamiltonian,
-    mixer_hamiltonian,
-    layers=2,
-    optimizer='L-BFGS-B'
+
+cost_H = ising_hamiltonian(
+    bonds, 
+    J = 1, 
+    h = 10, 
+    axis='Z')
+
+p = 2
+
+qaoa_results = run_qaoa(
+    cost_H,
+    p=p,
+    optimizer='COBYLA'
 )
 
-optimized_state = result.state
-energy = result.energy
+optimal_parameters = qaoa_results['parameters']
+qaoa_energy_value = qaoa_results['cost']
+qaoa_state = qaoa_results['state']
+
+qaoa_state.draw()
 ```
 
 The optimization process minimizes the expectation value:
