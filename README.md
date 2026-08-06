@@ -11,8 +11,6 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 # Overview
 
-    
-
 Unlike high-level quantum SDK wrappers, this framework implements core simulation methods directly, emphasizing numerical transparency, modular design, and understanding of the underlying physics. The framework was developed from first principles to provide transparency into the underlying mathematics and numerical methods behind quantum simulation, and is designed as both a research and educational platform for exploring the connection between quantum information, computational physics, and quantum many-body systems.
 
 ---
@@ -103,7 +101,6 @@ t, mz_trotter = observable_vs_time(
 )
 ```
 
-
 ![TFIM Magnetization Dynamics](figures/square_tfim_magnetization_exact_vs_trotter.png)
 
 *Comparison of exact and Trotterized magnetization dynamics for the transverse-field Ising model, illustrating increasing accuracy of the Trotter approximation with a greater number of Trotter steps.*
@@ -164,7 +161,6 @@ vqe_ground_state = hardware_efficient_ansatz(
 vqe_ground_state.draw()
 
 ```
-
 
 ![VQE correlation Map](figures/vqe_heisen_corr_map.png)
 
@@ -256,7 +252,6 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 *QAOA energy landscape for p=1, illustrating how the cost and mixer parameters influence the variational energy. The blue marker denotes the optimal parameter pair.*
 
-
 The notebook demonstrates:
 
 - construction of spin Hamiltonians from physical interactions
@@ -266,7 +261,6 @@ The notebook demonstrates:
 - comparison between variational results and exact solutions
 
 ---
-
 
 # Design Philosophy
 
@@ -309,39 +303,16 @@ allowing components to be reused across different physical systems.
 
 ---
 
-# Suggested Architecture
+# Motivation
 
-The project is organized as a reusable Python package:
+Modern quantum computing requires expertise across multiple domains:
 
-```
-hamlet/
-│
-├── circuits/
-│   ├── circuit.py
-│   ├── gates.py
-│   └── compiler.py
-│
-├── hamiltonians/
-│   ├── pauli.py
-│   ├── hubbard.py
-│   ├── ising.py
-│   └── heisenberg.py
-│
-├── algorithms/
-│   ├── vqe.py
-│   └── qaoa.py
-│
-├── evolution/
-│   └── time_evolution.py
-│
-├── observables/
-│   └── measurements.py
-│
-└── visualization/
-    └── plotting.py
-```
+- Quantum information
+- Numerical simulation
+- Many-body physics
+- Software engineering
 
-This modular architecture separates physical models from simulation algorithms, allowing the same Hamiltonian framework to be used for exact evolution, Trotterized dynamics, VQE, and QAOA.
+Hamlet Quantum was developed to explore these connections by building the computational tools required to understand quantum systems from the ground up.
 
 ---
 
@@ -373,8 +344,7 @@ Planned improvements include:
 
 ---
 
-
-# Installation
+## Installation
 
 Clone the repository:
 
@@ -383,16 +353,22 @@ git clone https://github.com/USERNAME/hamlet-quantum.git
 cd hamlet-quantum
 ```
 
-Install using:
+Create the environment and install dependencies with **uv**:
+
+```bash
+uv sync
+```
+
+Alternatively, install the package in editable mode with pip:
 
 ```bash
 pip install -e .
 ```
 
-Run examples:
+Launch the demonstration notebooks:
 
 ```bash
-jupyter lab examples/
+jupyter lab notebooks/
 ```
 
 ---
@@ -410,19 +386,6 @@ Development:
 
 - pytest
 - Jupyter
-
----
-
-# Motivation
-
-Modern quantum computing requires expertise across multiple domains:
-
-- Quantum information
-- Numerical simulation
-- Many-body physics
-- Software engineering
-
-Hamlet Quantum was developed to explore these connections by building the computational tools required to understand quantum systems from the ground up.
 
 ---
 
