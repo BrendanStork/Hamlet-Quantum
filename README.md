@@ -199,7 +199,7 @@ where:
 
 - $H_C$ encodes the optimization problem
 - $H_M$ mixes the computational basis states
-- $p$ is iteration of operations
+- $p$ is the number of QAOA layers
 - $\gamma\$ and $\beta\$ are optimized variational parameters
 
 In this example, spin configurations are encoded as computational basis states and optimized through a Hamiltonian representation of the spin system.
