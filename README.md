@@ -152,7 +152,17 @@ vqe_results = run_vqe(
 
 vqe_ground_energy = vqe_results.fun
 optimal_params = vqe_results.x
+
+psi = Quantum_Circuit(N) # Should match Hilbert dimension of model
+
+vqe_ground_state = hardware_efficient_ansatz(
+    psi, 
+    optimal_params, 
+    layers=layers
 )
+
+vqe_ground_state.draw()
+
 ```
 
 
@@ -218,7 +228,15 @@ optimal_parameters = qaoa_results['parameters']
 qaoa_energy_value = qaoa_results['cost']
 qaoa_state = qaoa_results['state']
 
-qaoa_state.draw()
+p_depth_probabilities = p_val_probablity(cost_H, 4)
+
+gammas = np.linspace(0, np.pi, 100)
+betas = np.linspace(0, np.pi, 100)
+E_map = qaoa_energy_map(
+    cost_H,
+    gammas = gammas,
+    betas = betas
+)
 ```
 
 The optimization process minimizes the expectation value:
