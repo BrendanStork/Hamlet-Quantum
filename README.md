@@ -152,7 +152,7 @@ vqe_results = run_vqe(
 vqe_ground_energy = vqe_results.fun
 optimal_params = vqe_results.x
 
-psi = Quantum_Circuit(N) # Should match Hilbert dimension of model
+psi = Quantum_Circuit(N) 
 
 vqe_ground_state = hardware_efficient_ansatz(
     psi, 
