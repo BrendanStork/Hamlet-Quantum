@@ -248,7 +248,7 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 ![QAOA Probability Distribution](figures/qaoa_prob_distribution.png)
 
-*Measurement probabilities after QAOA optimization, showing increasing concentration on the lowest-energy spin state as the number of QAOA layers ($p$) increases.*
+*Measurement probabilities after QAOA optimization, showing increasing concentration on the lowest-energy spin state as the number of QAOA layers p increases.*
 
 ![QAOA Spin Optimization](figures/qaoa__sqrlattice_energy_landscape.png)
 
