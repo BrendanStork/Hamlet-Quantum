@@ -351,7 +351,7 @@ Planned improvements include:
 Clone the repository:
 
 ```bash
-git clone https://github.com/USERNAME/hamlet-quantum.git
+git clone https://github.com/BrendanStork/Hamlet-Quantum.git
 cd hamlet-quantum
 ```
 
