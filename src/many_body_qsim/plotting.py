@@ -117,6 +117,7 @@ def plot_correlation_map(
     cmap='coolwarm',
     colorbar=True,
     colorbar_label=None,
+    colorbar_fontsize = 14,
     vmin=None,
     vmax=None,
     **imshow_kwargs
@@ -147,10 +148,10 @@ def plot_correlation_map(
     #    plt.colorbar(im, ax=ax)
     
     if colorbar:
-        cbar = plt.colorbar(im, ax=ax)
+        cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     
         if colorbar_label is not None:
-            cbar.set_label(colorbar_label)
+            cbar.set_label(colorbar_label, fontsize= colorbar_fontsize)
             cbar.ax.yaxis.set_label_position('right')
         
     n_sites_i, n_sites_j = corr_map.shape

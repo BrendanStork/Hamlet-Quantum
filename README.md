@@ -7,7 +7,7 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 ---
 
-![Overview](figures/overview.png)
+![Overview](figures/overview_image.png)
 
 # Overview
 
@@ -164,7 +164,7 @@ vqe_ground_state.draw()
 
 ```
 
-![VQE correlation Map](figures/vqe_heisen_corr_map.png)
+![VQE correlation Map](figures/vqe_heisen_spin_map.png)
 
 *Exact and VQE-computed nearest-neighbor spin correlation maps demonstrating accurate approximation of the Heisenberg ground state.*
 
@@ -250,7 +250,7 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 *Measurement probabilities after QAOA optimization, showing increasing concentration on the lowest-energy spin state as the number of QAOA layers ($p$) increases.*
 
-![QAOA Spin Optimization](figures/qaoa_energy_landscape.png)
+![QAOA Spin Optimization](figures/qaoa__sqrlattice_energy_landscape.png)
 
 *QAOA energy landscape for p=1, illustrating how the cost and mixer parameters influence the variational energy. The blue marker denotes the optimal parameter pair.*
 

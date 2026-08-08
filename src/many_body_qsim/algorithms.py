@@ -57,8 +57,8 @@ def run_vqe(
             ansatz,
             layers
         ),
-        method=method
-        #options={'maxiter':10000}
+        method=method,
+        options={'maxiter':10000}
     )
 
 
@@ -97,21 +97,19 @@ def pauli_exponential_evolution(qc, H, angle):
         for q in range(num_qubits):
 
             p = pauli_string[q]
-            #print(p, q)
+
             if p != 'I':
                 active_qubits.append(q)
             
             if p == 'X':
                 qc.h(q)
-                #print('H', q)
+
                 qc.gate_count += 1
             elif p == 'Y':
                 qc.sdag(q)
                 qc.h(q)
                 qc.gate_count += 2
-                #print('Sdag', q)
-                #print('H', q)
-        #print(active_qubits)
+
         # -------------------------
         # 2. ENTANGLE PARITY
         # -------------------------
@@ -121,8 +119,7 @@ def pauli_exponential_evolution(qc, H, angle):
             qc.cx(active_qubits[i],
                   active_qubits[i + 1])
             qc.gate_count += 1
-            #print(active_qubits[i],
-             #         active_qubits[i + 1])
+
         # -------------------------
         # 3. PHASE ROTATION
         # -------------------------
@@ -132,7 +129,7 @@ def pauli_exponential_evolution(qc, H, angle):
                 2 * coeff * angle
             )
             qc.gate_count += 1
-            #print('Rz', active_qubits[-1], coeff)
+
         # -------------------------
         # 4. UNCOMPUTE PARITY
         # -------------------------
@@ -150,14 +147,12 @@ def pauli_exponential_evolution(qc, H, angle):
 
             if p == 'X':
                 qc.h(q)
-                #print('H', q)
                 qc.gate_count += 1
             elif p == 'Y':
                 qc.h(q)
                 qc.s(q)
                 qc.gate_count += 2
-                #print('H', q)
-                #print('S', q)
+
     return qc
     
     
