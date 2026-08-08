@@ -352,7 +352,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/BrendanStork/Hamlet-Quantum.git
-cd hamlet-quantum
+cd Hamlet-Quantum
 ```
 
 Create the environment and install dependencies with **uv**:
