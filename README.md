@@ -7,7 +7,7 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 ---
 
-![Overview](figures/overview_image.png)
+![Overview](figures/overview.png)
 
 # Overview
 
@@ -164,7 +164,7 @@ vqe_ground_state.draw()
 
 ```
 
-![VQE correlation Map](figures/vqe_heisen_spin_map.png)
+![VQE correlation Map](figures/exact_vs_vqe_heisen_spin_map.png)
 
 *Exact and VQE-computed nearest-neighbor spin correlation maps demonstrating accurate approximation of the Heisenberg ground state.*
 
