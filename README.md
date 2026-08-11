@@ -252,7 +252,7 @@ and produces a variational approximation to the lowest-energy spin configuration
 
 ![QAOA Spin Optimization](figures/qaoa__sqrlattice_energy_landscape.png)
 
-*QAOA energy landscape for p=1, illustrating how the cost and mixer parameters influence the variational energy. The blue marker denotes the optimal parameter pair.*
+*QAOA energy landscape for p=1, illustrating how the cost and mixer parameters influence the variational approximation for energy. The blue marker denotes the optimal parameter pair.*
 
 The notebook demonstrates:
 
