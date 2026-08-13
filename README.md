@@ -13,7 +13,7 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 Hamlet Quantum bridges **quantum information** and **quantum many-body physics** through implementations of custom statevector simulation, quantum gate operations, **circuit compilation and visualization**, Pauli-string Hamiltonians, **exact and Trotterized time evolution**, lattice models including the **Fermi-Hubbard**, **Heisenberg**, and **Transverse-Field Ising** models, **Jordan-Wigner transformations** for the Hubbard model, and hybrid quantum-classical algorithms including **Variational Quantum Eigensolver (VQE)** and **Quantum Approximate Optimization Algorithm (QAOA)**.
 
-Unlike high-level quantum SDK wrappers, this framework implements core simulation methods directly, emphasizing numerical transparency, modular design, and understanding of the underlying physics. The framework was developed from first principles to provide transparency into the underlying mathematics and numerical methods behind quantum simulation, and is designed as both a research and educational platform for exploring the connection between quantum information, computational physics, and quantum many-body systems.
+Unlike high-level quantum SDK wrappers, this framework implements core simulation methods directly, emphasizing numerical transparency, modular design, and understanding of the underlying physics. The framework was developed from first principles to provide insight into the underlying mathematics and numerical methods behind quantum simulation, and is designed as both a research and educational platform for exploring the connection between quantum information, computational physics, and quantum many-body systems.
 
 ---
 
