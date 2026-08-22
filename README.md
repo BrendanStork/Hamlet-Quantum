@@ -391,6 +391,12 @@ Development:
 
 ---
 
+# License
+
+Hamlet Quantum is licensed under the [MIT License](LICENSE).
+
+---
+
 # Author
 
 Brendan Stork
