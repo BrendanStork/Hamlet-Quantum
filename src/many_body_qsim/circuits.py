@@ -93,6 +93,7 @@ class Quantum_Circuit:
 
     def p(self, qubitIndex, theta):
         self.gate_op(GATES['P'](theta), qubitIndex)
+        self.gates.append(('P', qubitIndex))
         return
 
     def rx(self, qubitIndex, theta):
@@ -287,5 +288,34 @@ class Quantum_Circuit:
             if start + layers_per_block < len(layers):
                 print()
     
+    def resources(self):
+        gate_counts = {}
 
+        for gate in self.gates:
+            name = gate[0]
+            gate_counts[name] = gate_counts.get(name, 0) + 1
+
+        single_qubit_gates = sum(
+            count for name, count in gate_counts.items()
+            if name != 'CX'
+        )
+
+        two_qubit_gates = gate_counts.get('CX', 0)
+
+        layers = self.layers()
+
+        two_qubit_depth = sum(
+            any(gate[0] == 'CX' for gate in layer)
+            for layer in layers
+        )
+
+        return {
+            'num_qubits': self.numqubits,
+            'gate_count': len(self.gates),
+            'single_qubit_gates': single_qubit_gates,
+            'two_qubit_gates': two_qubit_gates,
+            #'depth': len(layers),
+            #'two_qubit_depth': two_qubit_depth,
+            'gate_counts': gate_counts
+        }
     
