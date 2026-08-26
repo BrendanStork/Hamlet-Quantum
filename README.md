@@ -19,14 +19,14 @@ Unlike high-level quantum SDK wrappers, this framework implements core simulatio
 
 # Highlights
 
-- Custom statevector quantum circuit simulator
+- Custom statevector quantum circuit simulation
+- Quantum lattice model generation
+- Jordan-Wigner fermion-to-qubit mapping for the Hubbard model
 - Gate-level quantum operations implemented from first principles
 - Circuit compilation, layering, and visualization
 - General Pauli-string Hamiltonian representation
 - Exact Hamiltonian time evolution
 - Suzuki-Trotter digital quantum simulation
-- Quantum lattice model generation
-- Jordan-Wigner fermion-to-qubit mapping for the Hubbard model
 - Observable calculation and correlation analysis
 - Variational Quantum Eigensolver (VQE)
 - Quantum Approximate Optimization Algorithm (QAOA)
