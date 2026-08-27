@@ -3,7 +3,7 @@
 ## A First-Principles Quantum Computing and Many-Body Simulation Framework
 
 
-A modular quantum computing many-body simulation framework built from scratch in Python using NumPy and SciPy, combining quantum circuit simulation, Hamiltonian-based quantum dynamics, variational algorithms, and condensed matter physics simulations into a unified software architecture.
+A modular quantum computing and many-body simulation framework built from scratch in Python using NumPy and SciPy. Hamlet Quantum demonstrates an end-to-end workflow for modeling physical systems with quantum computation: from constructing physical Hamiltonians and mapping them to qubits, through Hamiltonian evolution and variational algorithms, to gate-level quantum circuits and physical observables.
 
 ---
 
@@ -11,51 +11,80 @@ A modular quantum computing many-body simulation framework built from scratch in
 
 # Overview
 
-Hamlet Quantum bridges quantum information and quantum many-body physics through implementations of custom statevector simulation, quantum gate operations, circuit compilation and visualization, Pauli-string Hamiltonians, exact and Trotterized time evolution, lattice models including the Fermi-Hubbard, Heisenberg, and Transverse-Field Ising models, Jordan-Wigner transformations for the Hubbard model, and hybrid quantum-classical algorithms including Variational Quantum Eigensolver (VQE) and Quantum Approximate Optimization Algorithm (QAOA).
+Hamlet Quantum connects many-body physics, quantum information, and quantum computation through a unified software architecture.
 
-Unlike high-level quantum SDK wrappers, this framework implements core simulation methods directly, emphasizing numerical transparency, modular design, and understanding of the underlying physics. The framework was developed from first principles to provide insight into the underlying mathematics and numerical methods behind quantum simulation, and is designed as both a research and educational platform for exploring the connection between quantum information, computational physics, and quantum many-body systems.
+The framework allows a physical system to be modeled end-to-end from the ground up:
 
----
+lattice geometry → physical model → Hamiltonian → qubit representation → quantum evolution/algorithm → gate-level circuit → observables
 
-# Highlights
+Core capabilities include:
 
-- Custom statevector quantum circuit simulation
+- End-to-end physical-to-quantum circuit workflow
 - Quantum lattice model generation
-- Jordan-Wigner fermion-to-qubit mapping for the Hubbard model
-- Gate-level quantum operations implemented from first principles
-- Circuit compilation, layering, and visualization
+- Custom statevector quantum circuit simulation
 - General Pauli-string Hamiltonian representation
+- Gate-level quantum operations implemented from first principles
+- Jordan-Wigner fermion-to-qubit mapping for the Hubbard model
 - Exact Hamiltonian time evolution
 - Suzuki-Trotter digital quantum simulation
-- Observable calculation and correlation analysis
+- Circuit compilation, layering, visualization, and resource analysis
+- Observable and correlation calculation
 - Variational Quantum Eigensolver (VQE)
 - Quantum Approximate Optimization Algorithm (QAOA)
 
-## Structure
+Current supported lattice models include the Fermi-Hubbard, Heisenberg, and Transverse-Field Ising models.
 
-The framework separates:
+Rather than delegating core simulation methods to an external quantum-computing framework, Hamlet implements the underlying numerical and quantum-computing operations directly using NumPy and SciPy. This emphasizes numerical transparency, modularity, and understanding of the mathematical connection between physical models and quantum circuits.
 
+---
+
+# End-to-End Quantum Modeling
+
+Hamlet is designed to demonstrate how a physical question can be translated into an implementable quantum computation.
+
+```text
+            Physical Problem
+                    |
+                    v
+         Lattice / Physical Model
+                    |
+                    v
+         Hamiltonian Construction
+                    |
+                    v
+    Pauli-String / Qubit Representation
+                    |
+       +-------------------------+
+       |                         |
+       v                         v
+Hamiltonian Evolution       Variational Algorithms
+       |                         |
+       v                         v
+Exact / Trotterized           VQE / QAOA
+Evolution                        |
+       |                         |
+       +------------+------------+
+                    |
+                    v
+             Quantum Circuit
+                    |
+                    v
+             Gate Operations
+                    |
+                    v
+     Physical Observables / Analysis
 ```
-Lattice Geometry
-        |
-        v
-Hamiltonian Construction
-        |
-        v
-Quantum Evolution
-        |
-        v
-Observables and Analysis
-```
 
-This allows the same underlying infrastructure to support both:
+This architecture allows the same underlying Hamiltonian and circuit infrastructure to support both:
 
-- **gate-based quantum computation**
-- **many-body Hamiltonian simulation**
+* Gate-based quantum computation
+* Many-body Hamiltonian simulation
 
-## Demonstrations
+The goal is not simply to simulate a quantum circuit, but to demonstrate the connection between a **physical model, its mathematical Hamiltonian, its qubit mapping, and the quantum gate operations required to study it**.
 
-### 1. Exact vs Trotter Evolution: Transverse Field Ising Model
+# Demonstrations
+
+## 1. Exact vs Trotter Evolution: Transverse Field Ising Model
 
 The transverse field Ising model:
 
@@ -88,7 +117,7 @@ t, mz_exact = observable_vs_time(
     H,
     time=15,
     timesteps=100,
-    method='exact'
+    method='exact',
     observable = mZ
 )
 
@@ -98,7 +127,7 @@ t, mz_trotter = observable_vs_time(
     time=15,
     timesteps=100,
     method='trotter_fixed_steps',
-    trotter_steps=20
+    trotter_steps=20,
     observable = mZ
 )
 ```
@@ -117,7 +146,7 @@ This demonstrates:
 
 ---
 
-### 2. VQE: Heisenberg Correlation Analysis
+## 2. VQE: Heisenberg Correlation Analysis
 
 The framework implements VQE for approximating ground-state energies using parameterized quantum circuits.
 
@@ -182,7 +211,7 @@ The VQE implementation demonstrates:
 
 ---
 
-### 3. QAOA: Spin State Optimization
+## 3. QAOA: Spin State Optimization
 
 The framework includes an implementation of the **Quantum Approximate Optimization Algorithm (QAOA)** for finding low-energy states of spin Hamiltonians.
 
@@ -226,7 +255,7 @@ optimal_parameters = qaoa_results['parameters']
 qaoa_energy_value = qaoa_results['cost']
 qaoa_state = qaoa_results['state']
 
-p_depth_probabilities = p_val_probablity(cost_H, 4)
+p_depth_probabilities = p_val_probability(cost_H, 4)
 
 gammas = np.linspace(0, np.pi, 100)
 betas = np.linspace(0, np.pi, 100)
@@ -264,13 +293,29 @@ The notebook demonstrates:
 
 ---
 
+# Physics Validation
+
+The lattice models and quantum algorithms are validated against known physical and numerical results.
+
+Validation methods include:
+
+* Exact diagonalization
+* Comparison of exact and Trotterized dynamics
+* Trotter convergence with increasing step count
+* VQE energy comparison against exact ground-state energies
+* Ground-state fidelity and correlation comparisons
+
+The goal is to verify not only that the software executes correctly, but that the implemented models reproduce the expected physics.
+
+---
+
 # Design Philosophy
 
 The project emphasizes:
 
 ## First-Principles Implementation
 
-Core algorithms are implemented directly rather than relying on existing quantum frameworks.
+Core algorithms are implemented directly rather than relying on existing external quantum frameworks.
 
 This provides:
 
@@ -295,26 +340,15 @@ Rather than treating circuits as abstract operations, Hamlet Quantum connects qu
 
 The framework separates:
 
-- circuit construction
+- Lattice and model construction
 - Hamiltonian generation
-- evolution algorithms
-- observables
-- visualization
+- Pauli-string representation
+- Circuit construction
+- Evolution algorithms
+- Observables
+- Visualization and analysis
 
-allowing components to be reused across different physical systems.
-
----
-
-# Motivation
-
-Modern quantum computing requires expertise across multiple domains:
-
-- Quantum information
-- Numerical simulation
-- Many-body physics
-- Software engineering
-
-Hamlet Quantum was developed to explore these connections by building the computational tools required to understand quantum systems from the ground up.
+This allows the same computational infrastructure to be reused across different physical systems and quantum algorithms
 
 ---
 
