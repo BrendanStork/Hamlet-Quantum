@@ -9,7 +9,7 @@ A modular quantum computing and many-body simulation framework built from scratc
 
 ![Overview](figures/overview.png)
 
-# Overview
+## Overview
 
 Hamlet Quantum connects many-body physics, quantum information, and quantum computation through a unified software architecture.
 The framework allows a physical system to be modeled from the ground up.
@@ -35,7 +35,7 @@ Rather than delegating core simulation methods to an external quantum-computing 
 
 ---
 
-# End-to-End Quantum Modeling
+## End-to-End Quantum Modeling
 
 Hamlet is designed to demonstrate how the analysis and evolution of a physical system can be translated into an implementable quantum computation.
 
@@ -68,9 +68,9 @@ This architecture allows the same underlying Hamiltonian and circuit infrastruct
 
 This demonstrates the connection between a **physical model, its mathematical Hamiltonian, its qubit mapping, and the quantum gate operations required to study it**.
 
-# Demonstrations
+## Demonstrations
 
-## 1. Exact vs Trotter Evolution: Transverse Field Ising Model
+### 1. Exact vs Trotter Evolution: Transverse Field Ising Model
 
 The transverse field Ising model:
 
@@ -132,7 +132,7 @@ This demonstrates:
 
 ---
 
-## 2. VQE: Heisenberg Correlation Analysis
+### 2. VQE: Heisenberg Correlation Analysis
 
 The framework implements VQE for approximating ground-state energies using parameterized quantum circuits.
 
@@ -197,7 +197,7 @@ The VQE implementation demonstrates:
 
 ---
 
-## 3. QAOA: Spin State Optimization
+### 3. QAOA: Spin State Optimization
 
 The framework includes an implementation of the **Quantum Approximate Optimization Algorithm (QAOA)** for finding low-energy states of spin Hamiltonians.
 
@@ -279,7 +279,7 @@ The notebook demonstrates:
 
 ---
 
-# Physics Validation
+## Physics Validation
 
 The lattice models and quantum algorithms are validated against known physical and numerical results.
 
@@ -295,11 +295,11 @@ The goal is to verify not only that the software executes correctly, but that th
 
 ---
 
-# Design Philosophy
+## Design Philosophy
 
 The project emphasizes:
 
-## First-Principles Implementation
+### First-Principles Implementation
 
 Core algorithms are implemented directly rather than relying on existing external quantum frameworks.
 
@@ -311,7 +311,7 @@ This provides:
 
 ---
 
-## Physics-Informed Simulation
+### Physics-Informed Simulation
 
 Rather than treating circuits as abstract operations, Hamlet Quantum connects quantum algorithms to physically meaningful systems:
 
@@ -322,7 +322,7 @@ Rather than treating circuits as abstract operations, Hamlet Quantum connects qu
 
 ---
 
-## Modular Scientific Software
+### Modular Scientific Software
 
 The framework separates:
 
@@ -338,7 +338,7 @@ This allows the same computational infrastructure to be reused across different 
 
 ---
 
-# Limitations
+## Limitations
 
 This project focuses on clarity and extensibility rather than competing with optimized production simulators.
 
@@ -352,7 +352,7 @@ Current limitations:
 
 These limitations motivate future extensions toward larger-scale simulation methods.
 
-# Future Development
+## Future Development
 
 Planned improvements include:
 
@@ -395,7 +395,7 @@ jupyter lab notebooks/
 
 ---
 
-# Dependencies
+## Dependencies
 
 Core dependencies:
 
@@ -411,13 +411,13 @@ Development:
 
 ---
 
-# License
+## License
 
 Hamlet Quantum is licensed under the [MIT License](LICENSE).
 
 ---
 
-# Author
+## Author
 
 Brendan Stork
 
