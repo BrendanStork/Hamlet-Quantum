@@ -3,7 +3,7 @@
 ## A First-Principles Quantum Computing and Many-Body Simulation Framework
 
 
-A modular quantum computing and many-body simulation framework built from scratch in Python using NumPy and SciPy. Hamlet Quantum demonstrates an end-to-end workflow for modeling physical systems with quantum computation: from constructing physical Hamiltonians and expressing them in qubit operators, through Hamiltonian evolution and variational algorithms, to gate-level quantum circuits and physical observables.
+A modular quantum computing and many-body simulation framework built from scratch in Python using NumPy and SciPy. Hamlet Quantum demonstrates an end-to-end workflow for transparent modeling of physical systems through quantum computation, spanning lattice and Hamiltonian construction, quantum evolution and variational algorithms, gate-level quantum circuits, and physical observables.
 
 ---
 
@@ -31,13 +31,13 @@ Core capabilities include:
 
 Currently supported lattice models include the Fermi-Hubbard, Heisenberg, and Transverse-Field Ising models.
 
-Rather than delegating core simulation methods to an external black box quantum-computing framework, Hamlet implements the underlying numerical operations directly using NumPy and SciPy, to emphasize numerical transparency, modularity, and understanding of the mathematical connection between physical models and quantum circuits.
+Rather than delegating core simulation methods to an external quantum-computing framework, Hamlet implements the underlying numerical operations directly using NumPy and SciPy, to emphasize transparency, modularity, and understanding of the mathematical connection between physical models and quantum circuits.
 
 ---
 
 # End-to-End Quantum Modeling
 
-Hamlet is designed to demonstrate how a the analysis and evolution of a physical system can be translated into an implementable quantum computation.
+Hamlet is designed to demonstrate how the analysis and evolution of a physical system can be translated into an implementable quantum computation.
 
 ```text
              Lattice Geometry
