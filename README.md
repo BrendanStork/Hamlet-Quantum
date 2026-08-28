@@ -40,10 +40,10 @@ Rather than delegating core simulation methods to an external quantum-computing 
 Hamlet is designed to demonstrate how the analysis and evolution of a physical system can be translated into an implementable quantum computation.
 
 ```text
-             Lattice Geometry
+             Physical System
                     |
                     v
-              Physical Model
+                  Model
                     |
                     v
                Hamiltonian
