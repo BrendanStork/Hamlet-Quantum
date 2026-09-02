@@ -3,7 +3,7 @@
 ## A First-Principles Quantum Computing and Many-Body Simulation Framework
 
 
-A modular quantum computing and many-body simulation framework built from scratch in Python using NumPy and SciPy. Hamlet Quantum demonstrates an end-to-end workflow for transparent modeling of physical systems through quantum computation, spanning lattice and Hamiltonian construction, quantum evolution and variational algorithms, gate-level quantum circuits, and physical observables.
+A modular quantum computing and many-body simulation framework built from scratch in Python using NumPy and SciPy. Hamlet demonstrates an end-to-end workflow for transparent modeling of physical systems through quantum computation, spanning lattice and Hamiltonian construction, quantum evolution and variational algorithms, gate-level quantum circuits, and physical observables.
 
 ---
 
@@ -11,7 +11,7 @@ A modular quantum computing and many-body simulation framework built from scratc
 
 ## Overview
 
-Hamlet Quantum connects many-body physics, quantum information, and quantum computation through a unified software architecture.
+Hamlet connects many-body physics, quantum information, and quantum computation through a unified software architecture.
 The framework allows a physical system to be modeled from the ground up.
 
 Core capabilities include:
@@ -340,7 +340,7 @@ This allows the same computational infrastructure to be reused across different 
 
 ## Limitations
 
-This project focuses on clarity and extensibility rather than competing with optimized production simulators.
+Hamlet focuses on clarity and extensibility rather than competing with optimized production simulators.
 
 Current limitations:
 
