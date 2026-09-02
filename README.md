@@ -11,8 +11,7 @@ A modular quantum computing and many-body simulation framework built from scratc
 
 ## Overview
 
-Hamlet connects many-body physics, quantum information, and quantum computation through a unified software architecture.
-The framework allows a physical system to be modeled from the ground up.
+Hamlet is motivated by one of the foundational goals of quantum computing: using quantum computers to simulate quantum systems. It connects many-body physics, quantum information, and quantum computation through a unified software architecture.
 
 Core capabilities include:
 
