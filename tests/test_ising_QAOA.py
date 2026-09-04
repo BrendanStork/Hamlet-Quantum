@@ -1,12 +1,12 @@
 
 import numpy as np
 
-from many_body_qsim.lattices import square_lattice
-from many_body_qsim.hamiltonians import (
+from hamlet.lattices import square_lattice
+from hamlet.hamiltonians import (
     ising_hamiltonian,
     pauli_basis_to_matrix
 )
-from many_body_qsim.algorithms import run_qaoa
+from hamlet.algorithms import run_qaoa
 
 
 def test_ising_qaoa_workflow():

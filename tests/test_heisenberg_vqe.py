@@ -1,15 +1,15 @@
 
 import numpy as np
 
-from many_body_qsim.circuits import Quantum_Circuit
-from many_body_qsim.lattices import square_lattice
-from many_body_qsim.hamiltonians import (
+from hamlet.circuits import Quantum_Circuit
+from hamlet.lattices import square_lattice
+from hamlet.hamiltonians import (
     heisenberg_hamiltonian,
     pauli_basis_to_matrix
 )
-from many_body_qsim.algorithms import run_vqe
-from many_body_qsim.ansatz import hardware_efficient_ansatz
-from many_body_qsim.observables import fidelity
+from hamlet.algorithms import run_vqe
+from hamlet.ansatz import hardware_efficient_ansatz
+from hamlet.observables import fidelity
 
 
 def test_heisenberg_vqe_workflow():

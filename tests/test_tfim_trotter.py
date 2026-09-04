@@ -1,9 +1,9 @@
 import numpy as np
 
-from many_body_qsim.lattices import square_lattice
-from many_body_qsim.hamiltonians import transverse_ising_hamiltonian
-from many_body_qsim.circuits import Quantum_Circuit
-from many_body_qsim.observables import magnetization, observable_vs_time
+from hamlet.lattices import square_lattice
+from hamlet.hamiltonians import transverse_ising_hamiltonian
+from hamlet.circuits import Quantum_Circuit
+from hamlet.observables import magnetization, observable_vs_time
 
 
 def test_tfim_exact_vs_trotter_workflow():

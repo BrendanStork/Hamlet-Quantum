@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-from many_body_qsim.gates import GATES, apply_cnot, apply_hadamard_all
-from many_body_qsim.circuits import Quantum_Circuit
+from hamlet.gates import GATES, apply_cnot, apply_hadamard_all
+from hamlet.circuits import Quantum_Circuit
 
 theta = np.random.default_rng().uniform(0,2*np.pi)
 

@@ -1,6 +1,6 @@
 import numpy as np
-from many_body_qsim.circuits import Quantum_Circuit
-from many_body_qsim.gates import apply_hadamard_all
+from .circuits import Quantum_Circuit
+from .gates import apply_hadamard_all
 from scipy.optimize import minimize
  
 '''
@@ -285,7 +285,7 @@ def qaoa_energy_map(
 
     return energy_map
 
-def p_val_probablity(cost_hamiltonian, p):
+def p_val_probability(cost_hamiltonian, p):
     n_qubits = len(next(iter(cost_hamiltonian)))
     prob_array = np.zeros((4, 2**n_qubits))
     for i in range(1, 1+p):

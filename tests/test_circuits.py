@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from many_body_qsim.circuits import Quantum_Circuit
+from hamlet.circuits import Quantum_Circuit
 
 
 def test_single_qubit_x_gate():
