@@ -285,7 +285,7 @@ def qaoa_energy_map(
 
     return energy_map
 
-def p_val_probablity(cost_hamiltonian, p):
+def p_val_probability(cost_hamiltonian, p):
     n_qubits = len(next(iter(cost_hamiltonian)))
     prob_array = np.zeros((4, 2**n_qubits))
     for i in range(1, 1+p):
