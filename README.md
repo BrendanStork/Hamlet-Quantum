@@ -370,8 +370,8 @@ Planned improvements include:
 Clone the repository:
 
 ```bash
-git clone https://github.com/BrendanStork/hamlet-quantum.git
-cd hamlet-quantum
+git clone https://github.com/BrendanStork/Hamlet-Quantum.git
+cd Hamlet-Quantum
 ```
 
 Create the environment and install Hamlet and its dependencies with **uv**:
