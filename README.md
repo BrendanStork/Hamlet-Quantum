@@ -312,7 +312,7 @@ This provides:
 
 ### Physics-Informed Simulation
 
-Rather than treating circuits as abstract operations, Hamlet Quantum connects quantum algorithms to physically meaningful systems:
+Rather than treating circuits as abstract operations, Hamlet connects quantum algorithms to physically meaningful systems:
 
 - Spin models
 - Fermionic lattice models
