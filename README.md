@@ -333,7 +333,7 @@ The framework separates:
 - Observables
 - Visualization and analysis
 
-This allows the same computational infrastructure to be reused across different physical systems and quantum algorithms
+This allows the same computational infrastructure to be reused across different physical systems and quantum algorithms.
 
 ---
 
