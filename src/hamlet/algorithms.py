@@ -1,6 +1,6 @@
 import numpy as np
-from many_body_qsim.circuits import Quantum_Circuit
-from many_body_qsim.gates import apply_hadamard_all
+from .circuits import Quantum_Circuit
+from .gates import apply_hadamard_all
 from scipy.optimize import minimize
  
 '''

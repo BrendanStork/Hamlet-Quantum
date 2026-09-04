@@ -1,8 +1,8 @@
 import numpy as np
 
-from many_body_qsim.circuits import Quantum_Circuit
-from many_body_qsim.evolution import exact_evolve, trotter_evolve
-from many_body_qsim.gates import GATES
+from hamlet.circuits import Quantum_Circuit
+from hamlet.evolution import exact_evolve, trotter_evolve
+from hamlet.gates import GATES
 
 '''Test if norm is preserved after evolution'''
 

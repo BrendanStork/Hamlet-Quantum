@@ -1,8 +1,8 @@
 
 import numpy as np
 
-from many_body_qsim.lattices import square_lattice
-from many_body_qsim.hamiltonians import (
+from hamlet.lattices import square_lattice
+from hamlet.hamiltonians import (
     string_to_operator,
     general_hamiltonian,
     transverse_ising_hamiltonian,
