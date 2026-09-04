@@ -370,23 +370,29 @@ Planned improvements include:
 Clone the repository:
 
 ```bash
-git clone https://github.com/BrendanStork/Hamlet-Quantum.git
-cd Hamlet-Quantum
+git clone https://github.com/BrendanStork/hamlet-quantum.git
+cd hamlet-quantum
 ```
 
-Create the environment and install dependencies with **uv**:
+Create the environment and install Hamlet and its dependencies with **uv**:
 
 ```bash
 uv sync
 ```
 
-Alternatively, install the package in editable mode with pip:
+Launch the demonstration notebooks within the project environment:
+
+```bash
+uv run jupyter lab notebooks/
+```
+
+Alternatively, install Hamlet in editable mode with pip:
 
 ```bash
 pip install -e .
 ```
 
-Launch the demonstration notebooks:
+Then launch the demonstration notebooks:
 
 ```bash
 jupyter lab notebooks/
