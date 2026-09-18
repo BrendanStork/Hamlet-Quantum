@@ -30,7 +30,7 @@ class Quantum_Circuit:
         self.state[0] = 1
         self.gates = []
         self.gate_count = 0
-
+ 
     def gate_op(self, gate, target):
 
         bit = self.numqubits - 1 - target # Index change from big endian to little endian
@@ -166,11 +166,34 @@ class Quantum_Circuit:
 
         return new_qc
         
-        
-        
     def layers(self):
-
         layers = []
+        next_free_layer = [0] * self.numqubits
+
+        for gate in self.gates:
+            if gate[0] == 'CX':
+                qubits = [gate[1], gate[2]]
+            else:
+                qubits = [gate[1]]
+
+            # Gate must come after all previous gates on its qubits
+            layer_index = max(next_free_layer[q] for q in qubits)
+
+            # Make sure that layer exists
+            while len(layers) <= layer_index:
+                layers.append([])
+
+            layers[layer_index].append(gate)
+
+            # Those qubits are now unavailable until the next layer
+            for q in qubits:
+                next_free_layer[q] = layer_index + 1
+
+        return layers
+        
+    def draw_layers(self):
+
+        draw_layers = []
 
         for gate in self.gates:
 
@@ -188,14 +211,14 @@ class Quantum_Circuit:
                 used = {gate[1]}
 
             # First gate creates the first layer
-            if not layers:
-                layers.append([gate])
+            if not draw_layers:
+                draw_layers.append([gate])
                 continue
 
             occupied = set()
 
             # Only inspect the most recent layer
-            for g in layers[-1]:
+            for g in draw_layers[-1]:
 
                 if g[0] == 'CX':
 
@@ -212,20 +235,20 @@ class Quantum_Circuit:
 
             if occupied.isdisjoint(used):
 
-                layers[-1].append(gate)
+                draw_layers[-1].append(gate)
 
             else:
 
-                layers.append([gate])
+                draw_layers.append([gate])
 
-        return layers
+        return draw_layers
         
-    def draw(self, layer_width = 11, layers_per_block=10):
+    def draw(self, layer_width = 11, draw_layers_per_block=10):
         
-        layers = self.layers()
+        draw_layers = self.draw_layers()
 
         # Draw one block at a time
-        for start in range(0, len(layers), layers_per_block):
+        for start in range(0, len(draw_layers), draw_layers_per_block):
 
             lines = [
                 f'q{i//2}: {"─"*2}'
@@ -233,8 +256,8 @@ class Quantum_Circuit:
                 else ' ' * 6
                 for i in range(self.numqubits*2)]
             
-            # Only draw this block of layers
-            for layer in layers[start:start + layers_per_block]:
+            # Only draw this block of draw_layers
+            for layer in draw_layers[start:start + draw_layers_per_block]:
                 
 
 
@@ -285,7 +308,7 @@ class Quantum_Circuit:
                 print(line)
 
             # Blank line between blocks
-            if start + layers_per_block < len(layers):
+            if start + draw_layers_per_block < len(draw_layers):
                 print()
     
     def resources(self):
@@ -314,8 +337,8 @@ class Quantum_Circuit:
             'gate_count': len(self.gates),
             'single_qubit_gates': single_qubit_gates,
             'two_qubit_gates': two_qubit_gates,
-            #'depth': len(layers),
-            #'two_qubit_depth': two_qubit_depth,
+            'depth': len(layers),
+            'two_qubit_depth': two_qubit_depth,
             'gate_counts': gate_counts
         }
     
