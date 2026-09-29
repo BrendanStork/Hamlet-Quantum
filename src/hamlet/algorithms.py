@@ -303,3 +303,4 @@ def enumerate_probabilities(qc):
             format(state, f'0{N}b'),
             probability
         )
+

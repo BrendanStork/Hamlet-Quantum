@@ -48,6 +48,57 @@ def apply_cnot(state, control, target):
                 )
 
     return new_state
+    
+
+def apply_cp(qc, control, target, theta):
+
+    n = qc.numqubits # For appropriate indexing
+
+    if control == target:
+        raise ValueError("Control and target must differ")
+
+    # You switch the indices from big endian to little (n - 1 = max index)
+    control_bit = n - 1 - control
+    target_bit = n - 1 - target
+
+    phase = np.exp(1j * theta)
+
+    for i in range(len(qc.state)):
+        control_on = (i >> control_bit) & 1
+        target_on = (i >> target_bit) & 1
+
+        if control_on and target_on:
+            qc.state[i] *= phase
+
+    return 
+
+    
+def apply_crz(qc, control, target, theta):
+
+    n = qc.numqubits  # For appropriate indexing
+
+    if control == target:
+        raise ValueError("Control and target must differ")
+
+    # Switch indices from big endian to little endian
+    # (n - 1 = max index)
+    control_bit = n - 1 - control
+    target_bit = n - 1 - target
+
+    phase_zero = np.exp(-1j * theta / 2)
+    phase_one = np.exp(1j * theta / 2)
+
+    for i in range(len(qc.state)):
+        control_on = (i >> control_bit) & 1
+        target_on = (i >> target_bit) & 1
+
+        if control_on:
+            if target_on:
+                qc.state[i] *= phase_one
+            else:
+                qc.state[i] *= phase_zero
+
+    return
 
 def apply_hadamard_all(qc):
     for i in range(qc.numqubits):
