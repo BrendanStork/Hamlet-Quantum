@@ -293,7 +293,7 @@ class Quantum_Circuit:
                         high = max(control, target)*2
 
                         cells[control*2] = '●'.center(layer_width, '─')
-                        cells[target*2] = 'X'.center(layer_width, '─')
+                        cells[target*2] = '[X]'.center(layer_width, '─')
 
                         for q in range(low + 1, high):
                             if q%2 ==0:
