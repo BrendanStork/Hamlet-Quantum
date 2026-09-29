@@ -116,6 +116,16 @@ class Quantum_Circuit:
         self.gates.append(('CX', control, target))
         return
         
+    def cp(self, control, target, theta):
+        self.state = apply_cp(self.state, control, target, theta)
+        self.gates.append(('CP', control, target, theta))
+        return
+        
+    def crz(self, control, target, theta):
+        self.state = apply_crz(self.state, control, target, theta)
+        self.gates.append(('CRZ', control, target, theta))
+        return
+        
     def apply_hadamard_all(self):
         for i in range(self.numqubits):
             self.h(i)
