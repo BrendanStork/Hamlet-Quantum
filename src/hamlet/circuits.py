@@ -1,5 +1,5 @@
 import numpy as np
-from .gates import GATES, apply_cnot
+from .gates import GATES, apply_cnot, apply_cp, apply_crz
 
 
 def build_full_operator(gate_matrix, target_qubit, num_qubits):
