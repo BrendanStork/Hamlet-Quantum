@@ -259,7 +259,7 @@ class Quantum_Circuit:
 
         return draw_layers
         
-    def draw(self, layer_width = 11, draw_layers_per_block=10):
+    def draw(self, layer_width = 11, draw_layers_per_block=9):
         
         draw_layers = self.draw_layers()
 
