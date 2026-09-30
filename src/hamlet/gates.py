@@ -47,55 +47,60 @@ def apply_cnot(state, control, target):
     return new_state
     
 
-def apply_cp(qc, control, target, theta):
+def apply_cp(state, control, target, theta):
 
-    n = int(len(state).bit_length() - 1)  # For appropriate indexing
+    n = int(len(state).bit_length() - 1)
 
     if control == target:
         raise ValueError("Control and target must differ")
 
-    # You switch the indices from big endian to little (n - 1 = max index)
+    # Convert big-endian qubit index to bit position
     control_bit = n - 1 - control
     target_bit = n - 1 - target
 
     phase = np.exp(1j * theta)
 
-    for i in range(len(qc.state)):
+    new_state = state.copy()
+
+    for i in range(len(state)):
+
         control_on = (i >> control_bit) & 1
         target_on = (i >> target_bit) & 1
 
         if control_on and target_on:
-            qc.state[i] *= phase
+            new_state[i] *= phase
 
-    return 
-
+    return new_state
     
-def apply_crz(qc, control, target, theta):
+def apply_crz(state, control, target, theta):
 
-    n = int(len(state).bit_length() - 1)   # For appropriate indexing
+    n = int(len(state).bit_length() - 1)
 
     if control == target:
         raise ValueError("Control and target must differ")
 
-    # Switch indices from big endian to little endian
-    # (n - 1 = max index)
+    # Convert big-endian qubit index to bit position
     control_bit = n - 1 - control
     target_bit = n - 1 - target
 
     phase_zero = np.exp(-1j * theta / 2)
     phase_one = np.exp(1j * theta / 2)
 
-    for i in range(len(qc.state)):
+    new_state = state.copy()
+
+    for i in range(len(state)):
+
         control_on = (i >> control_bit) & 1
         target_on = (i >> target_bit) & 1
 
         if control_on:
-            if target_on:
-                qc.state[i] *= phase_one
-            else:
-                qc.state[i] *= phase_zero
 
-    return
+            if target_on:
+                new_state[i] *= phase_one
+            else:
+                new_state[i] *= phase_zero
+
+    return new_state
 
 def apply_hadamard_all(qc):
     for i in range(qc.numqubits):
