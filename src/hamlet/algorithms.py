@@ -80,7 +80,7 @@ def mixer_hamiltonian(n_qubits):
 
 def pauli_exponential_evolution(qc, H, angle):
 
-    length_H_term = len(next(iter(H))) # Grabs the first basis state's length
+    length_H_term = len(next(iter(H))) # Grabs the first Hamiltonian term's length
     num_qubits = qc.numqubits
 
     if num_qubits != length_H_term:

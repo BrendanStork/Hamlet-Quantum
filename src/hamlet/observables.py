@@ -67,7 +67,7 @@ def correlation_map(axis='Z'):
 
     return _obs
     
-def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = None, sample_every = 1, trotter_steps = None):
+def observable_vs_time(qc0, hamiltonian, *, time, timesteps, method, observable, dt = None, sample_every = 1, trotter_steps = None):
     N = timesteps
     dt = time/timesteps
     t = np.linspace(0, time, N)
@@ -77,7 +77,7 @@ def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = 
     if method == 'exact':
         for i in range(N):
             qc = qc0.copy()
-            psi = exact_evolve(qc, basis, time = t[i])
+            psi = exact_evolve(qc, hamiltonian, time = t[i])
             vals[i] = observable(psi)
 
     elif method == 'trotter':
@@ -85,7 +85,7 @@ def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = 
         sample_length = int(N/sample_every)
         vals = []
         for i in range(0, N):
-            qc = trotter_step(qc, basis, dt = dt)
+            qc = trotter_step(qc, hamiltonian, dt = dt)
             if i % sample_every == 0:
                 vals.append(observable(qc))
                 
@@ -94,7 +94,7 @@ def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = 
             qc = qc0.copy()
             psi = trotter_evolve(
                 qc,
-                basis,
+                hamiltonian,
                 time=t[i],
                 trotter_steps=trotter_steps
             )
@@ -104,13 +104,13 @@ def observable_vs_time(qc0, basis, *, time, timesteps, method, observable, dt = 
 
     return t, vals
     
-def observable_vs_trottersteps(qc0, basis, *, time, observable, trottersteps):
+def observable_vs_trottersteps(qc0, hamiltonian, *, time, observable, trottersteps):
     steps = np.arange(1, trottersteps+1)
     vals = np.zeros(trottersteps)
 
     for i in range(trottersteps):
         qc = qc0.copy()
-        psi = trotter_evolve(qc, basis, time = time, trotter_steps=steps[i])
+        psi = trotter_evolve(qc, hamiltonian, time = time, trotter_steps=steps[i])
         vals[i] = observable(psi)
 
     return steps, vals

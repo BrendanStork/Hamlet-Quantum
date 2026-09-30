@@ -15,9 +15,9 @@ def string_to_operator(pauli_string):
     return operator
 
 
-def exact_evolve(qc0, basis, time):
+def exact_evolve(qc0, hamiltonian, time):
     H = 0*1j
-    for op, coeff in basis.items():
+    for op, coeff in hamiltonian.items():
         H += coeff * string_to_operator(op)
     U = linalg.expm(-1j*H*time)
     new_state = qc0
@@ -25,13 +25,13 @@ def exact_evolve(qc0, basis, time):
     return new_state
 '''
 
-def exact_evolve(qc0, basis, time):
+def exact_evolve(qc0, hamiltonian, time):
 
     dim = 2**qc0.numqubits
 
     H = sparse.csc_matrix((dim, dim), dtype=complex)
 
-    for op, coeff in basis.items():
+    for op, coeff in hamiltonian.items():
         H += coeff * string_to_operator(op)
 
     new_state = qc0
@@ -43,19 +43,19 @@ def exact_evolve(qc0, basis, time):
 ######GENERAL N QUBIT TROTTER#########
 
 
-def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
+def trotter_evolve(qc0, hamiltonian, time=1, trotter_steps=1):
     qc = qc0
-    length_basis_term = len(next(iter(basis))) # Grabs the first basis state's length
+    length_hamiltonian_term = len(next(iter(hamiltonian))) # Grabs the first Hamiltonian terms's length
     num_qubits = qc.numqubits
 
-    if num_qubits != length_basis_term:
+    if num_qubits != length_hamiltonian_term:
         raise ValueError('Length of Pauli strings must equal number of qubits')
     
     dt = time / trotter_steps
 
     for _ in range(trotter_steps):
 
-        for pauli_string, coeff in basis.items():
+        for pauli_string, coeff in hamiltonian.items():
             active_qubits = []
             
             # Basis rotations
@@ -110,15 +110,15 @@ def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
     return qc
 
 
-def trotter_step(qc, basis, *, dt):
+def trotter_step(qc, hamiltonian, *, dt):
 
-    length_basis_term = len(next(iter(basis))) # Grabs the first basis state's length
+    length_hamiltonian_term = len(next(iter(hamiltonian))) # Grabs the first Hamiltonian term's length
     num_qubits = qc.numqubits
     
-    if num_qubits != length_basis_term:
+    if num_qubits != length_hamiltonian_term:
         raise ValueError('Length of Pauli strings must equal number of qubits')
         
-    for pauli_string, coeff in basis.items():
+    for pauli_string, coeff in hamiltonian.items():
 
             active_qubits = []
             
@@ -135,11 +135,11 @@ def trotter_step(qc, basis, *, dt):
                 
                 if p == 'X':
                     qc.h(q)
-                    qc.gate_count += 1
+                    
                 elif p == 'Y':
                     qc.sdag(q)
                     qc.h(q)
-                    qc.gate_count += 2
+                    
 
             # -------------------------
             # 2. ENTANGLE PARITY
@@ -147,7 +147,7 @@ def trotter_step(qc, basis, *, dt):
             for i in range(len(active_qubits) - 1):
                 qc.cx(active_qubits[i],
                       active_qubits[i + 1])
-                qc.gate_count += 1
+                
 
             # -------------------------
             # 3. PHASE ROTATION
@@ -157,7 +157,7 @@ def trotter_step(qc, basis, *, dt):
                     active_qubits[-1],
                     2 * coeff * dt
                 )
-                qc.gate_count += 1
+                
                 
             # -------------------------
             # 4. UNCOMPUTE PARITY
@@ -165,7 +165,7 @@ def trotter_step(qc, basis, *, dt):
             for i in reversed(range(len(active_qubits) - 1)):
                 qc.cx(active_qubits[i],
                       active_qubits[i + 1])
-                qc.gate_count += 1
+                
 
             # -------------------------
             # 5. UNDO BASIS ROTATIONS
@@ -176,12 +176,12 @@ def trotter_step(qc, basis, *, dt):
 
                 if p == 'X':
                     qc.h(q)
-                    qc.gate_count += 1
+                    
                     
                 elif p == 'Y':
                     qc.h(q)
                     qc.s(q)
-                    qc.gate_count += 2
+                    
 
     return qc
     
