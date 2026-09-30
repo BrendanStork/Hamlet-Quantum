@@ -4,7 +4,7 @@
 import numpy as np
 import pytest
 
-from hamlet.circuits import Quantum_Circuit
+from hamlet.circuits import Quantum_Circuit, basis_state, random_state
 from hamlet.algorithms import qft, inverse_qft   # adjust import path
 
 
@@ -13,26 +13,8 @@ ATOL = 1e-10
 
 
 # ------------------------------------------------------------
-# Helpers
+# Helper
 # ------------------------------------------------------------
-
-def basis_state(n, index):
-    """Return |index> for an n-qubit big-endian statevector."""
-    state = np.zeros(2**n, dtype=complex)
-    state[index] = 1.0
-    return state
-
-
-def random_state(n, seed=1234):
-    """Return a normalized reproducible random complex state."""
-    rng = np.random.default_rng(seed)
-
-    state = (
-        rng.normal(size=2**n)
-        + 1j * rng.normal(size=2**n)
-    )
-
-    return state / np.linalg.norm(state)
 
 
 def qft_matrix(n):

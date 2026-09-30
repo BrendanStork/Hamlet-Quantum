@@ -183,5 +183,5 @@ def trotter_step(qc, hamiltonian, *, dt):
                     qc.s(q)
                     
 
-    return qc
+    return
     
