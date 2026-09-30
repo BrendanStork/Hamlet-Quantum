@@ -185,3 +185,113 @@ def trotter_step(qc, hamiltonian, *, dt):
 
     return
     
+def controlled_trotter_step(
+    qc,
+    hamiltonian,
+    control,
+    system_qubits,
+    *,
+    dt
+):
+
+    length_hamiltonian_term = len(next(iter(hamiltonian)))
+
+    num_system_qubits = len(system_qubits)
+
+    if num_system_qubits != length_hamiltonian_term:
+        raise ValueError(
+            'Length of Pauli strings must equal number of system qubits'
+        )
+        
+    if control in system_qubits:
+        raise ValueError(
+            'Control qubit cannot also be a system qubit'
+        )
+
+    for pauli_string, coeff in hamiltonian.items():
+
+        active_qubits = []
+
+        # -------------------------
+        # 1. BASIS ROTATIONS
+        # -------------------------
+
+        for i in range(num_system_qubits):
+
+            p = pauli_string[i]
+            q = system_qubits[i]
+
+            if p != 'I':
+                active_qubits.append(q)
+
+            if p == 'X':
+                qc.h(q)
+
+            elif p == 'Y':
+                qc.sdag(q)
+                qc.h(q)
+
+        # -------------------------
+        # ALL-IDENTITY TERM
+        # -------------------------
+
+        if not active_qubits:
+
+            qc.p(
+                control,
+                -coeff * dt
+            )
+
+            continue
+
+        # -------------------------
+        # 2. ENTANGLE PARITY
+        # -------------------------
+
+        for i in range(len(active_qubits) - 1):
+
+            qc.cx(
+                active_qubits[i],
+                active_qubits[i + 1]
+            )
+
+        # -------------------------
+        # 3. CONTROLLED PHASE ROTATION
+        # -------------------------
+
+        # Only CRZ control gate is necessary because the unitaries cancel out
+        # if control is zero
+        qc.crz(
+            control,
+            active_qubits[-1],
+            2 * coeff * dt
+        )
+
+        # -------------------------
+        # 4. UNCOMPUTE PARITY
+        # -------------------------
+
+        for i in reversed(range(len(active_qubits) - 1)):
+
+            qc.cx(
+                active_qubits[i],
+                active_qubits[i + 1]
+            )
+
+        # -------------------------
+        # 5. UNDO BASIS ROTATIONS
+        # -------------------------
+
+        for i in range(num_system_qubits):
+
+            p = pauli_string[i]
+            q = system_qubits[i]
+
+            if p == 'X':
+                qc.h(q)
+
+            elif p == 'Y':
+                qc.h(q)
+                qc.s(q)
+
+    return
