@@ -28,19 +28,16 @@ def apply_cnot(state, control, target):
     target_bit = n - 1 - target
 
     for i in range(len(state)):
+        
+        # Test if control is 1
+        control_on = (i >> control_bit) & 1
 
-        # Step 1: shift control bit to LSB
-        shifted = i >> control_bit
+        if control_on:
 
-        # Step 2: isolate that bit
-        control_value = shifted & 1
-
-        if control_value == 1:
-
-            # Step 3: flip target bit
+            # Flip target bit
             flipped_i = i ^ (1 << target_bit)
 
-            # Step 4: swap once
+            # Swap once
             if i < flipped_i:
                 new_state[i], new_state[flipped_i] = (
                     state[flipped_i],
@@ -48,8 +45,64 @@ def apply_cnot(state, control, target):
                 )
 
     return new_state
+    
+
+def apply_cp(state, control, target, theta):
+
+    n = int(len(state).bit_length() - 1)
+
+    if control == target:
+        raise ValueError("Control and target must differ")
+
+    # Convert big-endian qubit index to bit position
+    control_bit = n - 1 - control
+    target_bit = n - 1 - target
+
+    phase = np.exp(1j * theta)
+
+    new_state = state.copy()
+
+    for i in range(len(state)):
+
+        control_on = (i >> control_bit) & 1
+        target_on = (i >> target_bit) & 1
+
+        if control_on and target_on:
+            new_state[i] *= phase
+
+    return new_state
+    
+def apply_crz(state, control, target, theta):
+
+    n = int(len(state).bit_length() - 1)
+
+    if control == target:
+        raise ValueError("Control and target must differ")
+
+    # Convert big-endian qubit index to bit position
+    control_bit = n - 1 - control
+    target_bit = n - 1 - target
+
+    phase_zero = np.exp(-1j * theta / 2)
+    phase_one = np.exp(1j * theta / 2)
+
+    new_state = state.copy()
+
+    for i in range(len(state)):
+
+        control_on = (i >> control_bit) & 1
+        target_on = (i >> target_bit) & 1
+
+        if control_on:
+
+            if target_on:
+                new_state[i] *= phase_one
+            else:
+                new_state[i] *= phase_zero
+
+    return new_state
 
 def apply_hadamard_all(qc):
     for i in range(qc.numqubits):
         qc.h(i)
-    return qc
+    return

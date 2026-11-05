@@ -80,7 +80,7 @@ def mixer_hamiltonian(n_qubits):
 
 def pauli_exponential_evolution(qc, H, angle):
 
-    length_H_term = len(next(iter(H))) # Grabs the first basis state's length
+    length_H_term = len(next(iter(H))) # Grabs the first Hamiltonian term's length
     num_qubits = qc.numqubits
 
     if num_qubits != length_H_term:
@@ -303,3 +303,48 @@ def enumerate_probabilities(qc):
             format(state, f'0{N}b'),
             probability
         )
+
+def qft(qc, qubits, swaps=True):
+
+    n = len(qubits)
+
+    for i in range(n):
+        target = qubits[i]
+
+        qc.h(target)
+
+        for j in range(i + 1, n):
+            control = qubits[j]
+
+            distance = j - i
+            theta = np.pi / (2 ** distance)
+
+            qc.cp(control, target, theta)
+
+    if swaps:
+        for i in range(n // 2):
+            qc.swap(qubits[i], qubits[n - 1 - i])
+            
+    
+def inverse_qft(qc, qubits, swaps=True):
+
+    n = len(qubits)
+
+    if swaps:
+        for i in range(n // 2):
+            qc.swap(qubits[i], qubits[n - 1 - i])
+
+    for i in reversed(range(n)):
+
+        target = qubits[i]
+
+        for j in reversed(range(i + 1, n)):
+            control = qubits[j]
+
+            distance = j - i
+            theta = -np.pi / (2 ** distance)
+
+            qc.cp(control, target, theta)
+            
+
+        qc.h(target)

@@ -1,25 +1,6 @@
 import numpy as np
-from .gates import GATES, apply_cnot
+from .gates import GATES, apply_cnot, apply_cp, apply_crz
 
-
-def build_full_operator(gate_matrix, target_qubit, num_qubits):
-    if target_qubit >= num_qubits:
-        raise ValueError("Invalid qubit index")
-
-    ops = []
-
-    for i in range(num_qubits):
-        if i == target_qubit:
-            ops.append(gate_matrix)     # already a matrix
-        else:
-            ops.append(GATES['I'])      # matrix
-
-    full_op = ops[0]
-
-    for op in ops[1:]:
-        full_op = np.kron(full_op, op)
-
-    return full_op
 
 
 class Quantum_Circuit:
@@ -114,6 +95,22 @@ class Quantum_Circuit:
     def cx(self, control, target):
         self.state = apply_cnot(self.state, control, target)
         self.gates.append(('CX', control, target))
+        return
+        
+    def cp(self, control, target, theta):
+        self.state = apply_cp(self.state, control, target, theta)
+        self.gates.append(('CP', control, target, theta))
+        return
+        
+    def crz(self, control, target, theta):
+        self.state = apply_crz(self.state, control, target, theta)
+        self.gates.append(('CRZ', control, target, theta))
+        return
+        
+    def swap(self, q1, q2):
+        self.cx(q1, q2)
+        self.cx(q2, q1)
+        self.cx(q1, q2)
         return
         
     def apply_hadamard_all(self):
@@ -342,3 +339,41 @@ class Quantum_Circuit:
             'gate_counts': gate_counts
         }
     
+
+def build_full_operator(gate_matrix, target_qubit, num_qubits):
+    if target_qubit >= num_qubits:
+        raise ValueError("Invalid qubit index")
+
+    ops = []
+
+    for i in range(num_qubits):
+        if i == target_qubit:
+            ops.append(gate_matrix)     # already a matrix
+        else:
+            ops.append(GATES['I'])      # matrix
+
+    full_op = ops[0]
+
+    for op in ops[1:]:
+        full_op = np.kron(full_op, op)
+
+    return full_op
+    
+def basis_state(n, index):
+    """Return |index> for an n-qubit big-endian statevector."""
+    state = np.zeros(2**n, dtype=complex)
+    state[index] = 1.0
+    return state
+
+
+def random_state(n, seed=1234):
+    """Return a normalized reproducible random complex state."""
+    rng = np.random.default_rng(seed)
+
+    state = (
+        rng.normal(size=2**n)
+        + 1j * rng.normal(size=2**n)
+    )
+
+    return state / np.linalg.norm(state)
+

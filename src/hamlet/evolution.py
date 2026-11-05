@@ -15,9 +15,9 @@ def string_to_operator(pauli_string):
     return operator
 
 
-def exact_evolve(qc0, basis, time):
+def exact_evolve(qc0, hamiltonian, time):
     H = 0*1j
-    for op, coeff in basis.items():
+    for op, coeff in hamiltonian.items():
         H += coeff * string_to_operator(op)
     U = linalg.expm(-1j*H*time)
     new_state = qc0
@@ -25,13 +25,13 @@ def exact_evolve(qc0, basis, time):
     return new_state
 '''
 
-def exact_evolve(qc0, basis, time):
+def exact_evolve(qc0, hamiltonian, time):
 
     dim = 2**qc0.numqubits
 
     H = sparse.csc_matrix((dim, dim), dtype=complex)
 
-    for op, coeff in basis.items():
+    for op, coeff in hamiltonian.items():
         H += coeff * string_to_operator(op)
 
     new_state = qc0
@@ -43,19 +43,19 @@ def exact_evolve(qc0, basis, time):
 ######GENERAL N QUBIT TROTTER#########
 
 
-def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
+def trotter_evolve(qc0, hamiltonian, time=1, trotter_steps=1):
     qc = qc0
-    length_basis_term = len(next(iter(basis))) # Grabs the first basis state's length
-    num_qubits = int(np.log2(len(qc.state))) # Gives number of qubits based on state coefficient length
+    length_hamiltonian_term = len(next(iter(hamiltonian))) # Grabs the first Hamiltonian terms's length
+    num_qubits = qc.numqubits
 
-    if num_qubits != length_basis_term:
+    if num_qubits != length_hamiltonian_term:
         raise ValueError('Length of Pauli strings must equal number of qubits')
     
     dt = time / trotter_steps
 
     for _ in range(trotter_steps):
 
-        for pauli_string, coeff in basis.items():
+        for pauli_string, coeff in hamiltonian.items():
             active_qubits = []
             
             # Basis rotations
@@ -110,16 +110,16 @@ def trotter_evolve(qc0, basis, time=1, trotter_steps=1):
     return qc
 
 
-def trotter_step(qc, basis, *, dt):
+def trotter_step(qc, hamiltonian, *, dt):
 
-    length_basis_term = len(next(iter(basis))) # Grabs the first basis state's length
+    length_hamiltonian_term = len(next(iter(hamiltonian))) # Grabs the first Hamiltonian term's length
     num_qubits = qc.numqubits
     
-    if num_qubits != length_basis_term:
+    if num_qubits != length_hamiltonian_term:
         raise ValueError('Length of Pauli strings must equal number of qubits')
         
-    for pauli_string, coeff in basis.items():
-            #print(pauli_string)
+    for pauli_string, coeff in hamiltonian.items():
+
             active_qubits = []
             
             # -------------------------
@@ -129,30 +129,26 @@ def trotter_step(qc, basis, *, dt):
             for q in range(num_qubits):
 
                 p = pauli_string[q]
-                #print(p, q)
+
                 if p != 'I':
                     active_qubits.append(q)
                 
                 if p == 'X':
                     qc.h(q)
-                    #print('H', q)
-                    qc.gate_count += 1
+                    
                 elif p == 'Y':
                     qc.sdag(q)
                     qc.h(q)
-                    qc.gate_count += 2
-                    #print('Sdag', q)
-                    #print('H', q)
-            #print(active_qubits)
+                    
+
             # -------------------------
             # 2. ENTANGLE PARITY
             # -------------------------
             for i in range(len(active_qubits) - 1):
                 qc.cx(active_qubits[i],
                       active_qubits[i + 1])
-                qc.gate_count += 1
-                #print(active_qubits[i],
-                 #         active_qubits[i + 1])
+                
+
             # -------------------------
             # 3. PHASE ROTATION
             # -------------------------
@@ -161,17 +157,16 @@ def trotter_step(qc, basis, *, dt):
                     active_qubits[-1],
                     2 * coeff * dt
                 )
-                qc.gate_count += 1
-                #print('Rz', active_qubits[-1], coeff)
+                
+                
             # -------------------------
             # 4. UNCOMPUTE PARITY
             # -------------------------
             for i in reversed(range(len(active_qubits) - 1)):
                 qc.cx(active_qubits[i],
                       active_qubits[i + 1])
-                qc.gate_count += 1
-                #print(active_qubits[i],
-                 #     active_qubits[i + 1])
+                
+
             # -------------------------
             # 5. UNDO BASIS ROTATIONS
             # -------------------------
@@ -181,13 +176,122 @@ def trotter_step(qc, basis, *, dt):
 
                 if p == 'X':
                     qc.h(q)
-                    #print('H', q)
-                    qc.gate_count += 1
+                    
+                    
                 elif p == 'Y':
                     qc.h(q)
                     qc.s(q)
-                    qc.gate_count += 2
-                    #print('H', q)
-                    #print('S', q)
-    return qc
+                    
+
+    return
     
+def controlled_trotter_step(
+    qc,
+    hamiltonian,
+    control,
+    system_qubits,
+    *,
+    dt
+):
+
+    length_hamiltonian_term = len(next(iter(hamiltonian)))
+
+    num_system_qubits = len(system_qubits)
+
+    if num_system_qubits != length_hamiltonian_term:
+        raise ValueError(
+            'Length of Pauli strings must equal number of system qubits'
+        )
+        
+    if control in system_qubits:
+        raise ValueError(
+            'Control qubit cannot also be a system qubit'
+        )
+
+    for pauli_string, coeff in hamiltonian.items():
+
+        active_qubits = []
+
+        # -------------------------
+        # 1. BASIS ROTATIONS
+        # -------------------------
+
+        for i in range(num_system_qubits):
+
+            p = pauli_string[i]
+            q = system_qubits[i]
+
+            if p != 'I':
+                active_qubits.append(q)
+
+            if p == 'X':
+                qc.h(q)
+
+            elif p == 'Y':
+                qc.sdag(q)
+                qc.h(q)
+
+        # -------------------------
+        # ALL-IDENTITY TERM
+        # -------------------------
+
+        if not active_qubits:
+
+            qc.p(
+                control,
+                -coeff * dt
+            )
+
+            continue
+
+        # -------------------------
+        # 2. ENTANGLE PARITY
+        # -------------------------
+
+        for i in range(len(active_qubits) - 1):
+
+            qc.cx(
+                active_qubits[i],
+                active_qubits[i + 1]
+            )
+
+        # -------------------------
+        # 3. CONTROLLED PHASE ROTATION
+        # -------------------------
+
+        # Only CRZ control gate is necessary because the unitaries cancel out
+        # if control is zero
+        qc.crz(
+            control,
+            active_qubits[-1],
+            2 * coeff * dt
+        )
+
+        # -------------------------
+        # 4. UNCOMPUTE PARITY
+        # -------------------------
+
+        for i in reversed(range(len(active_qubits) - 1)):
+
+            qc.cx(
+                active_qubits[i],
+                active_qubits[i + 1]
+            )
+
+        # -------------------------
+        # 5. UNDO BASIS ROTATIONS
+        # -------------------------
+
+        for i in range(num_system_qubits):
+
+            p = pauli_string[i]
+            q = system_qubits[i]
+
+            if p == 'X':
+                qc.h(q)
+
+            elif p == 'Y':
+                qc.h(q)
+                qc.s(q)
+
+    return

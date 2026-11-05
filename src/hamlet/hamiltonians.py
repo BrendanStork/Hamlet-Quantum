@@ -7,9 +7,9 @@ def string_to_operator(pauli_string):
         operator = np.kron(operator, GATES[p])
     return operator
 
-def pauli_basis_to_matrix(H):
+def pauli_basis_to_matrix(hamiltonian):
     H_matrix = 0*1j
-    for op, coeff in H.items():
+    for op, coeff in hamiltonian.items():
         H_matrix += coeff * string_to_operator(op)
     return H_matrix
 
